@@ -1,0 +1,100 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  email         String    @unique
+  password      String
+  name          String
+  role          Role      @default(ENTREPRENEUR)
+  products      Product[]
+  mentorships   Mentorship[] @relation("Mentor")
+  bio           String?   @db.Text
+  profileImage  String?
+
+   // Authentication fields
+  emailVerified          Boolean     @default(false)
+  verificationToken      String?
+  verificationTokenExpiry DateTime?
+  resetToken             String?
+  resetTokenExpiry       DateTime?
+
+  @@index([email])
+}
+
+model Product {
+  id             String       @id @default(cuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  title          String
+  description    String       @db.Text
+  videoUrl       String
+  status         ProductStatus @default(PENDING)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fundingAmount  Float?
+  mentorship     Mentorship?
+  pitchDeck      String?      // URL to uploaded pitch deck
+  images         String[]     // Array of image URLs
+  category       Category
+  
+  @@index([userId])
+  @@index([status])
+  @@index([category])
+}
+
+model Mentorship {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  mentorId    String
+  mentor      User      @relation("Mentor", fields: [mentorId], references: [id])
+  productId   String    @unique
+  product     Product   @relation(fields: [productId], references: [id])
+  status      MentorshipStatus @default(ACTIVE)
+  notes       String?   @db.Text
+  
+  @@index([mentorId])
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  ENTREPRENEUR
+}
+
+enum ProductStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  FUNDED
+}
+
+enum MentorshipStatus {
+  ACTIVE
+  COMPLETED
+  TERMINATED
+}
+
+enum Category {
+  TECHNOLOGY
+  HEALTH
+  EDUCATION
+  FINANCE
+  FOOD
+  RETAIL
+  ENTERTAINMENT
+  SUSTAINABILITY
+  OTHER
+}

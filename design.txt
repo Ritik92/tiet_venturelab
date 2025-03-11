@@ -1,0 +1,157 @@
+# TIET-UQ Centre of Excellence Website Component Summary
+
+## Color Scheme
+
+### Primary Colors
+- **Blues**:
+  - Primary blue: `blue-500` (#3B82F6) - Used for buttons, highlights, accent elements
+  - Dark blue: `blue-900` (#1E3A8A) - Used for text headers and gradient backgrounds
+  - Light blue: `blue-100` (#DBEAFE) - Used for button backgrounds, light backgrounds
+  - Blue accent: `blue-300` (#93C5FD), `blue-400` (#60A5FA) - Used for secondary elements and gradients
+  - Blue text: `blue-600` (#2563EB) - Used for links and some text elements
+
+### Secondary Colors
+- **Purples**:
+  - Purple: `purple-900` (#581C87) - Used in gradients with blue
+  - Various purple shades used in gradient overlays
+
+### Neutrals
+- **Whites & Grays**:
+  - White: `white` (#FFFFFF) - Used for text on dark backgrounds
+  - Gray light: `gray-50` (#F9FAFB), `gray-100` (#F3F4F6) - Used for section backgrounds
+  - Gray medium: `gray-700` (#374151), `gray-800` (#1F2937) - Used for borders and some text
+  - Gray dark: `gray-900` (#111827), `gray-950` (#030712) - Used for dark backgrounds (footer)
+
+## Typography
+
+### Font Families
+- Primary font: 'Inter' (sans-serif) - Used for body text and general content
+- Heading font: 'Space Grotesk' (sans-serif) - Used for headings (h1-h6)
+
+### Font Sizes
+- Headings: 
+  - Large: `text-4xl md:text-6xl` (hero)
+  - Section headers: `text-3xl md:text-4xl`
+  - Component headers: `text-2xl`, `text-xl`
+- Body text: 
+  - Regular: `text-lg`
+  - Small: `text-sm`
+
+### Font Weights
+- Bold: `font-bold` - Used for headers and important text
+- Medium: `font-medium` - Used for buttons and sub-headers
+- Light: `font-light` - Used for quotes
+
+## UI Components
+
+### Navigation
+- Fixed navigation bar that changes background on scroll
+- Mobile-responsive hamburger menu
+- Hover effects on navigation links with underline animation
+
+### Buttons
+- Primary: Blue background (`bg-blue-500`) with white text
+- Secondary: White border with transparent background
+- Tertiary: Light blue background with blue text
+- Hover effects: Scale transform, shadow increase
+
+### Cards
+- Shadow effects: `shadow-lg`, `shadow-xl`
+- Border radius: `rounded-lg`, `rounded-xl`
+- Hover effects: `hover:shadow-xl`, `hover:-translate-y-1`, `hover:-translate-y-2`
+- Glass effect: `backdrop-blur-sm` with semi-transparent backgrounds
+
+### Sections
+- Consistent padding: `py-28` (top/bottom padding)
+- Container with auto margins: `container mx-auto px-8`
+- Section headers with centered title and accent line
+
+### Animation Elements
+- Motion animations using Framer Motion:
+  - `fadeInUp` for revealing content on scroll
+  - `staggerChildren` for sequential animations
+  - Transitions with ease functions
+  - Hover animations
+
+## Layout Patterns
+
+### Section Structure
+1. Title area (centered)
+   - Small uppercase category text in blue
+   - Large title
+   - Divider line
+   - Optional description
+
+2. Content area
+   - Grid layouts: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+   - Flexbox layouts: `flex flex-col md:flex-row`
+   - Responsive column switching
+   - Consistent gap spacing
+
+### Responsive Design
+- Mobile-first approach
+- Breakpoints:
+  - `sm:` Small screens
+  - `md:` Medium screens
+  - `lg:` Large screens
+
+## Special UI Elements
+
+### Hero Section
+- Full-screen height with centered content
+- Background image with gradient overlay
+- News carousel with animated transitions
+- Rotating news items with navigation dots
+
+### Stats Section
+- Four-column grid with large numbers
+- Border top accent in blue
+- Hover shadow effect
+
+### Team Member Cards
+- Image with hover overlay effect
+- Social media icons revealed on hover
+- Information section below image
+
+### Program Tabs
+- Rounded tab buttons with active state
+- Animated content transition between tabs
+- Side-by-side image and text layout
+
+### Contact Form
+- Two-column layout (form and contact info)
+- Semi-transparent input fields on dark background
+- Blue focus rings on form elements
+
+## Special Effects
+
+### Transparency & Blur
+- `bg-white/10`, `bg-white/95` - Various opacity levels
+- `backdrop-blur-sm` - Subtle blur effects for glass-like UI
+
+### Gradients
+- `bg-gradient-to-r from-blue-900 to-purple-900` - Right-to-left gradients
+- `bg-gradient-to-t from-blue-900 to-transparent` - Bottom-to-top transparent gradients
+
+### Transitions
+- Transform effects: `hover:-translate-y-1`, `hover:scale-105`
+- Color transitions: `transition-colors`
+- Shadow transitions: `hover:shadow-xl`
+- All element transitions: `transition-all duration-300`
+
+## Icon Usage
+- React Icons library (FaArrowRight, FaLinkedin, etc.)
+- Icons in buttons with spacing
+- Social media icons
+- Animated icons (bounce effect on scroll indicator)
+
+## Best Practices for Creating New Pages
+
+1. Maintain the consistent section structure (title area + content area)
+2. Use the established color palette for cohesion
+3. Implement responsive designs with mobile-first approach
+4. Incorporate the animation patterns for content reveal
+5. Use the glass-effect cards for important content
+6. Keep typography consistent with the font hierarchy
+7. Apply consistent spacing (margins and padding)
+8. Use grid and flexbox layouts as established in the original
