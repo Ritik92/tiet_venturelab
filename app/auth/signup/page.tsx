@@ -15,7 +15,7 @@ export default function SignUp() {
   const [step, setStep] = useState(1); // 1: Form, 2: Verification sent
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -49,8 +49,9 @@ export default function SignUp() {
 
       // Show verification message
       setStep(2);
-    } catch (error) {
-      setError(error.message || 'An error occurred during registration');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'An error occurred during registration';
+      setError(errorMessage);
       setIsLoading(false);
     }
   };

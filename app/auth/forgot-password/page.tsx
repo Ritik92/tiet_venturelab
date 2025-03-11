@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import Link from 'next/link';
 import { FaArrowLeft, FaEnvelope } from 'react-icons/fa';
 
@@ -9,7 +9,7 @@ export default function ForgotPassword() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -29,7 +29,7 @@ export default function ForgotPassword() {
       }
 
       setSuccess(true);
-    } catch (error) {
+    } catch (error: any) {
       setError(error?.message || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);

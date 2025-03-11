@@ -27,7 +27,7 @@ export default function ResetPassword() {
     }
   }, [searchParams]);
 
-  const validateToken = async (token) => {
+  const validateToken = async (token: string) => {
     try {
       const response = await fetch(`/api/auth/verify-reset-token?token=${token}`);
       const data = await response.json();
@@ -45,7 +45,7 @@ export default function ResetPassword() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -78,7 +78,7 @@ export default function ResetPassword() {
       }
 
       setSuccess(true);
-    } catch (error) {
+    } catch (error: any) {
       setError(error.message || 'An error occurred. Please try again.');
     } finally {
       setIsLoading(false);

@@ -95,6 +95,7 @@ export const authOptions: AuthOptions = {
       try {
         if (token) {
           session.user = {
+            //@ts-ignore
             id: token.id as string,
             email: token.email as string,
             name: token.name as string
