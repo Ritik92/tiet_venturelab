@@ -59,7 +59,7 @@ export default function VerifyEmail() {
             
             <div className="pt-6">
               <Link 
-                href="/signin" 
+                href="/auth/signin" 
                 className="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-white bg-blue-500 hover:bg-blue-600 transition-all duration-300 font-medium hover:shadow-lg hover:scale-[1.01]"
               >
                 Sign In
