@@ -127,9 +127,9 @@ export default function LandingPage() {
     },
     {
       name: "Mr. Tathagat",
-      role: "Senior Javascript Engineer : CRED | prev : ixigo ",
+      role: "Director of PYOB and Bragfit | Founder of Tech Stockerzz",
       description: 
-        "Mr. Tathagat is an expert Javascript engineer with experience at leading tech companies. He specializes in building scalable web applications and mentoring engineering teams.",
+        "A serial entrepreneur with 8+ years of experience in digital innovation, affiliate marketing and brand building. Mentor at IEEE Student Branch and Entrepreneurship-Cell, delivered sessions at 50+ colleges and featured in 11+ news websites.",
       image: "/tathagat.png",
     },
    
