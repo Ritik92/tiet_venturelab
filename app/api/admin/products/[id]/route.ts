@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: any }
 ) {
   try {
     // Check authentication and admin role

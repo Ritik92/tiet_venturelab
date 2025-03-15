@@ -7,7 +7,7 @@ import { authOptions } from "@/auth.config";
 // GET /api/mentorships/[id] - Get a specific mentorship
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: any }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -78,7 +78,7 @@ export async function GET(
 // PATCH /api/mentorships/[id] - Update a mentorship status
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: any }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -167,7 +167,7 @@ export async function PATCH(
 // DELETE /api/mentorships/[id] - Delete a mentorship (admin only)
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: any }
 ) {
   try {
     const session = await getServerSession(authOptions);

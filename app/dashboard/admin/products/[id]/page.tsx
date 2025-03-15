@@ -39,7 +39,7 @@ interface Product {
   mentorship: Mentorship | null;
 }
 
-export default function ProductDetail({ params }: { params: { id: string } }) {
+export default function ProductDetail({ params }: { params: any }) {
   const { id } = params;
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);

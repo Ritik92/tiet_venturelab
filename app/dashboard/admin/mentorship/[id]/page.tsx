@@ -33,7 +33,7 @@ type MentorshipDetail = {
   };
 };
 
-export default function MentorshipDetailPage({ params }: { params: { id: string } }) {
+export default function MentorshipDetailPage({ params }: { params: any }) {
   const [mentorship, setMentorship] = useState<MentorshipDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
