@@ -123,7 +123,7 @@ export default function UserProductsPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-800">My Products</h1>
-        <Link href="/user/submit-product" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
+        <Link href="/dashboard/user/submit-product" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
           Add New Product
         </Link>
       </div>
@@ -131,7 +131,7 @@ export default function UserProductsPage() {
       {products.length === 0 ? (
         <div className="bg-white rounded-lg shadow-md p-8 text-center">
           <p className="text-gray-600 mb-4">You haven't added any products yet.</p>
-          <Link href="/user/submit-product" className="text-blue-600 hover:text-blue-800 font-medium">
+          <Link href="/dashboard/user/submit-product" className="text-blue-600 hover:text-blue-800 font-medium">
             Create your first product
           </Link>
         </div>
@@ -197,7 +197,7 @@ export default function UserProductsPage() {
                   </div>
                 )}
                 
-                <Link href={`/user/myproducts/${product.id}`} className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
+                <Link href={`/dashboard/user/myproducts/${product.id}`} className="block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300">
                   View Details
                 </Link>
               </div>

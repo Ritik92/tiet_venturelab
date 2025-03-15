@@ -4,7 +4,17 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from '@prisma/client';
 import { Prisma } from '@prisma/client';
 import { compare } from "bcryptjs";
+import NextAuth from "next-auth"
 
+declare module "next-auth" {
+  interface User {
+    id: string;
+    role: string;
+  }
+  interface Session {
+    user: User
+  }
+}
 const prisma = new PrismaClient();
 
 export const authOptions: AuthOptions = {
@@ -47,11 +57,11 @@ export const authOptions: AuthOptions = {
             throw new Error("Invalid password");
           }
           
-
           return {
             id: user.id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            role: user.role, // Include the role
           };
 
         } catch (error) {
@@ -84,6 +94,7 @@ export const authOptions: AuthOptions = {
           token.id = user.id;
           token.email = user.email;
           token.name = user.name;
+          token.role = user.role; // Add role to token
         }
         return token;
       } catch (error) {
@@ -98,7 +109,8 @@ export const authOptions: AuthOptions = {
             //@ts-ignore
             id: token.id as string,
             email: token.email as string,
-            name: token.name as string
+            name: token.name as string,
+            role: token.role as string // Add role to session
           };
         }
         return session;

@@ -4,8 +4,11 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowRight, FaLinkedin, FaTwitter, FaGithub, FaEnvelope, FaMapMarkerAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+
 
 // Animation variants
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
@@ -17,6 +20,7 @@ const staggerChildren = {
 };
 
 export default function LandingPage() {
+  const router=useRouter();
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeTab, setActiveTab] = useState(1);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -199,8 +203,8 @@ export default function LandingPage() {
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300"></span>
         </Link>
       ))}
-      <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-        Join Us
+      <button onClick={() => router.push('/auth/signin')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg  transform hover:-translate-y-0.5">
+        Log in
       </button>
     </div>
   </div>
@@ -226,8 +230,8 @@ export default function LandingPage() {
               {item}
             </Link>
           ))}
-          <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg mt-2">
-            Join Us
+          <button  onClick={()=>{router.push('/auth/signin')}} className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg mt-2">
+            Log in
           </button>
         </div>
       </motion.div>
