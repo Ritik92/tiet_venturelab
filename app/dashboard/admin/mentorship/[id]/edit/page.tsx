@@ -23,7 +23,7 @@ type User = {
   role: string;
 };
 
-export default function EditMentorshipPage({ params }: { params: { id: string } }) {
+export default function EditMentorshipPage({ params }: { params: any}) {
   const [mentorship, setMentorship] = useState<MentorshipDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
