@@ -63,36 +63,7 @@ export default function MentorshipDetailPage({ params }: { params: any }) {
     fetchMentorship();
   }, [params.id]);
 
-  const updateMentorshipStatus = async () => {
-    setUpdating(true);
-    try {
-      const response = await fetch(`/api/admin/mentorships/${params.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          status: newStatus,
-          notes: statusNotes ? `${mentorship?.notes || ''}\n\n${new Date().toLocaleDateString()}: ${statusNotes}` : mentorship?.notes,
-        }),
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Failed to update mentorship status');
-      }
-
-      // Refresh the data
-      const updatedData = await response.json();
-      setMentorship(updatedData);
-      setShowStatusModal(false);
-      setStatusNotes("");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-    } finally {
-      setUpdating(false);
-    }
-  };
+  
 
   if (loading) {
     return <div className="p-8 text-center">Loading mentorship details...</div>;
@@ -116,14 +87,9 @@ export default function MentorshipDetailPage({ params }: { params: any }) {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Mentorship Details</h1>
         <div className="space-x-2">
-          <button
-            onClick={() => setShowStatusModal(true)}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-          >
-            Update Status
-          </button>
+         
           <Link 
-            href="/dashboard/mentorships" 
+            href="/dashboard/admin/mentorship" 
             className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
           >
             Back to List
@@ -233,13 +199,7 @@ export default function MentorshipDetailPage({ params }: { params: any }) {
               >
                 Cancel
               </button>
-              <button
-                onClick={updateMentorshipStatus}
-                disabled={updating}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-300"
-              >
-                {updating ? "Updating..." : "Update Status"}
-              </button>
+             
             </div>
           </div>
         </div>

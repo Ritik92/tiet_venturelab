@@ -110,7 +110,7 @@ export default function ProductDetail({ params }: { params: any }) {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Product Details</h1>
         <button
-          onClick={() => router.push('/admin/products')}
+          onClick={() => router.push('/dashboard/admin/products')}
           className="bg-gray-100 px-4 py-2 rounded hover:bg-gray-200"
         >
           Back to Products

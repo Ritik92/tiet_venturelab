@@ -119,7 +119,7 @@ export default function MentorshipsPage() {
                       View
                     </Link>
                     <Link 
-                      href={`/dashboard/admin/mentorships/${mentorship.id}/edit`}
+                      href={`/dashboard/admin/mentorship/${mentorship.id}/edit`}
                       className="text-green-600 hover:text-green-800"
                     >
                       Edit

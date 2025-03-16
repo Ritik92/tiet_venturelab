@@ -203,6 +203,16 @@ export default function LandingPage() {
           <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300"></span>
         </Link>
       ))}
+      <Link
+        
+          href={`/dashboard/user/events`}
+          className={`relative font-medium transition-all duration-300 group ${
+            scrollY > 50 ? 'text-gray-800' : 'text-white'
+          }`}
+        >
+          <span className="group-hover:text-blue-500">Events</span>
+          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300"></span>
+        </Link>
       <button onClick={() => router.push('/auth/signin')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg  transform hover:-translate-y-0.5">
         Log in
       </button>
