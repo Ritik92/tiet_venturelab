@@ -6,24 +6,29 @@ interface StatsCardProps {
   value: number | string;
   description?: string;
   icon?: ReactNode;
+  className?: string;
 }
 
 export default function StatsCard({ 
   title, 
   value, 
   description, 
-  icon 
+  icon ,
+  className
 }: StatsCardProps) {
   return (
-    <Card>
+    <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+      <div className="absolute h-full w-1 bg-gradient-to-b from-blue-600 to-blue-400 left-0 top-0"></div>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {icon}
+        <CardTitle className="text-sm font-medium text-gray-800">{title}</CardTitle>
+        <div className="text-blue-600">
+          {icon}
+        </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+        <div className="text-2xl font-bold text-gray-900">{value}</div>
         {description && (
-          <p className="text-xs text-muted-foreground mt-1">{description}</p>
+          <p className="text-xs text-gray-600 mt-1">{description}</p>
         )}
       </CardContent>
     </Card>

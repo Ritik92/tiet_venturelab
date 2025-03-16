@@ -70,7 +70,7 @@ export default function EditMentorshipPage({ params }: { params: any}) {
         setNotes(mentorshipData.notes || "");
         
         // Fetch available mentors
-        const mentorsResponse = await fetch('/api/admin/users?role=MENTOR');
+        const mentorsResponse = await fetch('/api/users?role=MENTOR');
         if (!mentorsResponse.ok) {
           throw new Error('Failed to fetch mentors');
         }
@@ -114,7 +114,7 @@ export default function EditMentorshipPage({ params }: { params: any}) {
       
       // Wait a moment before redirecting
       setTimeout(() => {
-        router.push(`/dashboard/mentorships/${params.id}`);
+        router.push(`/dashboard/admin/mentorship/${params.id}`);
       }, 2000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -235,7 +235,7 @@ export default function EditMentorshipPage({ params }: { params: any}) {
 
           <div className="mt-8 flex justify-end space-x-3">
             <Link
-              href={`/dashboard/mentorships/${params.id}`}
+              href={`/dashboard/admin/mentorship/${params.id}`}
               className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
             >
               Cancel

@@ -45,78 +45,79 @@ export default function LandingPage() {
   }, []);
 
   const newsItems = [
-    { title: "Breakthrough in AI-Driven Medical Diagnostics", date: "March 05, 2025" },
-    { title: "Centre Researchers Win International Data Science Challenge", date: "March 06, 2025" },
-    { title: "New Environmental Monitoring System Deployed in Queensland", date: "March 06, 2025" },
-    { title: "AI Ethics Framework Adopted by Global Tech Leaders", date: "March 05, 2025" },
-    { title: "Wildlife Conservation Project Uses Computer Vision Innovations", date: "March 03, 2025" },
-    { title: "Cybersecurity Breakthrough Presented at International Conference", date: "February 28, 2025" },
-    { title: "Centre Announces New Industry Partnerships", date: "February 27, 2025" },
+    { title: "Mentor Labs Launches New Startup Accelerator Program", date: "March 12, 2025" },
+    { title: "Strategic Mentorship Sessions Open for Early-Stage Founders", date: "March 10, 2025" },
+    { title: "Funding Workshop: Connect with Investors Next Month", date: "March 08, 2025" },
+    { title: "Mentor Labs Partners with Global Venture Capital Firms", date: "March 05, 2025" },
+    { title: "Entrepreneur Networking Event: Building Sustainable Startups", date: "March 03, 2025" },
+    { title: "Success Story: Mentor Labs Startup Secures $2M in Funding", date: "February 28, 2025" },
+    { title: "New Growth Strategy Masterclass Announced for April", date: "February 25, 2025" },
   ];
 
   const stats = [
-    { number: "24+", text: "Research Projects" },
-    { number: "15+", text: "International Partnerships" },
-    { number: "45+", text: "Affiliated Researchers" },
-    { number: "12+", text: "Industry Collaborations" },
+    { number: "50+", text: "Startups Mentored" },
+    { number: "25+", text: "Funding Connections" },
+    { number: "40+", text: "Expert Mentors" },
+    { number: "15+", text: "Industry Partners" },
   ];
 
   const thematicAreas = [
     { 
-      title: "Health & Medicine", 
-      description: "Leveraging AI for precise diagnostics, personalized treatment plans, and healthcare optimization.", 
+      title: "Strategic Mentorship", 
+      description: "Personalized guidance from seasoned entrepreneurs and business leaders tailored to your unique journey and challenges.", 
       icon: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     { 
-      title: "Energy & Environment", 
-      description: "Creating sustainable solutions through smart grid optimization and environmental monitoring systems.", 
+      title: "Funding Access", 
+      description: "Connecting startups with investors through pitch refinement, business plan development, and direct introductions to our network.", 
       icon: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     { 
-      title: "Cybersecurity", 
-      description: "Developing advanced threat detection systems and privacy-preserving machine learning techniques.", 
+      title: "Growth Strategies", 
+      description: "Developing scalable strategies for market expansion, operational optimization, and sustainable long-term business growth.", 
       icon: "https://images.unsplash.com/photo-1563206767-5b18f218e8de?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     { 
-      title: "Behavioral Science", 
-      description: "Understanding human behavior through data-driven insights and ethical AI interactions.", 
+      title: "Community Building", 
+      description: "Creating a network of like-minded entrepreneurs and innovators to foster collaboration and shared learning experiences.", 
       icon: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     { 
-      title: "Sustainable Infrastructure", 
-      description: "Building smart cities with AI-powered systems for traffic, waste management, and urban planning.", 
+      title: "Sustainable Impact", 
+      description: "Fostering businesses that address pressing challenges while maintaining social and environmental responsibility.", 
       icon: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"
     },
     { 
-      title: "Smart Agriculture", 
-      description: "Enhancing crop yields and reducing resource usage through precision farming and predictive analytics.", 
+      title: "Global Expansion", 
+      description: "Supporting startups in breaking geographical boundaries through international partnerships and market entry strategies.", 
       icon: "https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
   ];
 
+
   const fundingPrograms = [
     {
-      title: "Joint PhD Program",
+      title: "Early-Stage Mentorship",
       description:
-        "Thapar Institute and University of Queensland's joint PhD program begins in 2025, supporting 5 computer science students. Students spend 3 years at Thapar, 1 year at Queensland, with joint supervision and plans to expand to other disciplines.",
+        "Our flagship program for startups at the ideation phase. Receive personalized guidance from industry experts who bring decades of experience to help validate your idea, craft a business model, and set the foundation for your entrepreneurial journey.",
       icon: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     {
-      title: "Seed Funding for Research Projects",
+      title: "Funding Readiness Program",
       description:
-        "In February 2025, the Centre will call for seed funding proposals in five focus areas, supporting up to 3 years of research with TIET-UQ collaboration, funding staff, equipment, travel, data, and software.",
+        "Designed for startups looking to secure investment. Our experts will help refine your pitch deck, polish your business plan, and connect you with our network of venture capitalists and angel investors to ensure you're well-prepared to secure the resources you need.",
       icon: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     {
-      title: "Centre PhD Travel Scholarships",
+      title: "Growth Accelerator",
       description:
-        "In February 2025, the centre will offer 5 annual PhD travel scholarships for students from any branch, funding travel between Thapar and Queensland, living costs, and joint supervision.",
+        "For established startups looking to scale. Our growth experts will analyze your market, identify key opportunities, and design scalable strategies that allow your business to expand sustainably across new markets and customer segments.",
       icon: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
     {
-      title: "Industry Collaborative Research Projects",
+      title: "Innovation Partnerships",
       description:
-        "In February 2025, the Centre will invite proposals to solve applied problems with industry partners, involving TIET, UQ, and industry. Industry partners must provide matched funding or in-kind support.",
+        "Connect with industry leaders to collaborate on innovative solutions. This program bridges the gap between startups and established companies, creating opportunities for joint ventures, pilot programs, and strategic partnerships.",
       icon: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
     },
   ];
@@ -141,9 +142,9 @@ export default function LandingPage() {
 
   return (
     <>
-      <Head>
-        <title>Centre of Excellence | Data Science & Artificial Intelligence</title>
-        <meta name="description" content="TIET-UQ Centre of Excellence in Data Science and AI" />
+       <Head>
+        <title>Mentor Labs | Where Ideas Meet Opportunity</title>
+        <meta name="description" content="Mentor Labs - Empowering Entrepreneurs" />
         <link rel="icon" href="/favicon.ico" />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
@@ -173,7 +174,7 @@ export default function LandingPage() {
       className="flex items-center"
     >
       <h1 className={`text-xl sm:text-2xl font-bold tracking-tight ${scrollY > 50 ? 'text-blue-900' : 'text-white'}`}>
-        TIET-UQ <span className="text-blue-500">CoE</span>
+      Mentor  <span className="text-blue-500">Labs</span>
       </h1>
     </motion.div>
 
@@ -269,14 +270,13 @@ export default function LandingPage() {
         className="md:w-1/2 text-white mb-16 md:mb-0"
       >
         <motion.h2 variants={fadeInUp} className="text-xl md:text-2xl font-medium mb-3 text-blue-300">
-          CENTRE OF EXCELLENCE
+        MENTOR <span className="text-blue-400">LABS</span>
         </motion.h2>
         <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-bold mb-8">
-          DATA SCIENCE <span className="text-blue-400">&</span> AI
+        Where Ideas Meet Opportunity
         </motion.h1>
         <motion.p variants={fadeInUp} className="text-lg md:text-xl mb-10 max-w-lg text-blue-100 leading-relaxed">
-          Pioneering research and innovation at the intersection of AI, data science, and real-world applications across India and Australia.
-        </motion.p>
+        Empowering entrepreneurs with personalized guidance, funding connections, and strategic growth expertise to transform bold ideas into impactful ventures.   </motion.p>
         <motion.div variants={fadeInUp} className="flex space-x-6">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -380,7 +380,7 @@ export default function LandingPage() {
       className="text-center mb-20"
     >
       <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">About Us</h2>
-      <h3 className="text-3xl md:text-4xl font-bold mb-5">Center of Excellence</h3>
+      <h3 className="text-3xl md:text-4xl font-bold mb-5">Mentor Labs</h3>
       <div className="w-24 h-1 bg-blue-500 mx-auto"></div>
     </motion.div>
     <div className="flex flex-col md:flex-row items-center gap-16">
@@ -409,32 +409,32 @@ export default function LandingPage() {
         viewport={{ once: true }}
         className="md:w-1/2"
       >
-        <h3 className="text-2xl font-bold text-blue-900 mb-6">Bridging Research Across Continents</h3>
+        <h3 className="text-2xl font-bold text-blue-900 mb-6">Your Trusted Partner in Entrepreneurship</h3>
         <p className="text-gray-700 text-lg leading-relaxed mb-6">
-          The TIET-UQ Centre of Excellence in Data Science and AI is a cross-disciplinary research powerhouse jointly operated by Thapar Institute of Engineering & Technology in Patiala, India, and The University of Queensland in Brisbane, Australia.
-        </p>
-        <p className="text-gray-700 text-lg leading-relaxed mb-10">
-          Our unique collaboration transcends both national and disciplinary boundaries, bringing together experts in computer science, engineering, behavioral science, health, agriculture, and environmental studies to develop innovative solutions for complex global challenges.
-        </p>
+  At Mentor Labs, we understand that entrepreneurship is not just a career path—it's a deeply personal journey filled with highs and lows. We exist to be your trusted partner in turning your dreams into milestones and your ideas into impactful ventures.
+</p>
+<p className="text-gray-700 text-lg leading-relaxed mb-10">
+  We don't just believe in startups—we believe in the people behind them. You have the vision and the courage to dream big. What you need is a guiding hand, a network of supporters, and the tools to shape your dreams into tangible success stories.
+</p>
         <div className="space-y-5">
-          <div className="flex items-start">
-            <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
-              1
-            </div>
-            <p className="text-gray-700 text-lg">Foster next-generation AI talent through innovative research and industry partnerships</p>
-          </div>
-          <div className="flex items-start">
-            <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
-              2
-            </div>
-            <p className="text-gray-700 text-lg">Drive impactful AI innovations through global collaboration and knowledge exchange</p>
-          </div>
-          <div className="flex items-start">
-            <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
-              3
-            </div>
-            <p className="text-gray-700 text-lg">Advance responsible AI solutions to enhance human capabilities and improve quality of life</p>
-          </div>
+        <div className="flex items-start">
+  <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
+    1
+  </div>
+  <p className="text-gray-700 text-lg">Personalized mentorship from seasoned entrepreneurs and business leaders</p>
+</div>
+<div className="flex items-start">
+  <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
+    2
+  </div>
+  <p className="text-gray-700 text-lg">Connections to investors through pitch refinement and direct introductions</p>
+</div>
+<div className="flex items-start">
+  <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
+    3
+  </div>
+  <p className="text-gray-700 text-lg">Scalable growth strategies for sustainable business expansion and impact</p>
+</div>
         </div>
       </motion.div>
     </div>
@@ -451,33 +451,33 @@ export default function LandingPage() {
     </div>
     <div className="max-w-4xl mx-auto text-center">
       <p className="text-2xl md:text-3xl italic font-light mb-16 text-blue-200">
-        "Transforming industries and lives in India and Australia via innovation-led Data Science and AI"
+      "Turning dreams into reality, creating the future together, one startup at a time"
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
-          <h3 className="text-xl font-bold mb-5 text-blue-300">Research Excellence</h3>
-          <p className="text-blue-100 leading-relaxed">
-            We're committed to pioneering research that pushes the boundaries of what's possible in AI and data science, creating knowledge with real-world impact.
-          </p>
-        </div>
-        <div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
-          <h3 className="text-xl font-bold mb-5 text-blue-300">Ethical Innovation</h3>
-          <p className="text-blue-100 leading-relaxed">
-            We develop AI systems that prioritize human well-being, privacy, and fairness, ensuring technology serves humanity's best interests.
-          </p>
-        </div>
-        <div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
-          <h3 className="text-xl font-bold mb-5 text-blue-300">Global Collaboration</h3>
-          <p className="text-blue-100 leading-relaxed">
-            We foster international partnerships between researchers, industry leaders, and communities to tackle the world's most pressing challenges.
-          </p>
-        </div>
-        <div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
-          <h3 className="text-xl font-bold mb-5 text-blue-300">Talent Development</h3>
-          <p className="text-blue-100 leading-relaxed">
-            We nurture the next generation of data scientists and AI researchers through innovative education and hands-on research opportunities.
-          </p>
-        </div>
+      <div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Empathy Meets Expertise</h3>
+  <p className="text-blue-100 leading-relaxed">
+    Our mentors approach your challenges with empathy, having faced similar struggles themselves, providing a balanced perspective that is both practical and inspiring.
+  </p>
+</div>
+<div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Your Vision, Our Mission</h3>
+  <p className="text-blue-100 leading-relaxed">
+    We don't impose cookie-cutter solutions. We take time to understand your vision and co-create strategies that align with your goals.
+  </p>
+</div>
+<div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Power of Connection</h3>
+  <p className="text-blue-100 leading-relaxed">
+    We pride ourselves on being the bridge that connects you to opportunities, whether through funding, resources, or collaborations.
+  </p>
+</div>
+<div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Sustainability and Impact</h3>
+  <p className="text-blue-100 leading-relaxed">
+    We are committed to fostering businesses that are not only profitable but also socially and environmentally responsible.
+  </p>
+</div>
       </div>
     </div>
   </div>
@@ -559,12 +559,11 @@ export default function LandingPage() {
       viewport={{ once: true }}
       className="text-center mb-20"
     >
-      <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">Our Focus</h2>
-      <h3 className="text-3xl md:text-4xl font-bold mb-5">Research Themes</h3>
-      <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
-      <p className="max-w-2xl mx-auto text-gray-700 text-lg">
-        Our interdisciplinary research addresses complex challenges across multiple domains, integrating cutting-edge AI and data science approaches.
-      </p>
+     <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">Our Services</h2>
+     <h3 className="text-3xl md:text-4xl font-bold mb-5">Comprehensive Offerings</h3>  <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
+     <p className="max-w-2xl mx-auto text-gray-700 text-lg">
+  At Mentor Labs, our services go beyond traditional mentoring. We are an incubator for growth, innovation, and excellence.
+</p>
     </motion.div>
     <motion.div
       initial="hidden"
@@ -733,7 +732,7 @@ export default function LandingPage() {
             </div>
             <div className="flex items-start">
               <FaEnvelope className="text-blue-400 text-2xl mt-1 mr-5" />
-              <p className="text-lg">coe-datasci@thapar.edu</p>
+              <p className="text-lg">mentorlabs@thapar.edu</p>
                       </div>
                     </div>
                   </div>
@@ -760,7 +759,7 @@ export default function LandingPage() {
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="mb-6 md:mb-0">
                   <h1 className="text-2xl font-bold">
-                    TIET-UQ <span className="text-blue-500">CoE</span>
+                    Mentor <span className="text-blue-500">Labs</span>
                   </h1>
                   <p className="text-gray-400 mt-2">Pioneering the future through AI and Data Science</p>
                 </div>
@@ -778,7 +777,7 @@ export default function LandingPage() {
               </div>
               <hr className="border-gray-800 my-8" />
               <div className="flex flex-col md:flex-row justify-between items-center">
-                <p className="text-gray-500">© 2025 TIET-UQ Centre of Excellence in Data Science and AI. All rights reserved.</p>
+                <p className="text-gray-500">© 2025 MENTOR LABS. All rights reserved.</p>
                 <p className="text-gray-500 mt-4 md:mt-0">
                   <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link> | 
                   <Link href="#" className="hover:text-white transition-colors ml-2">Terms of Service</Link>

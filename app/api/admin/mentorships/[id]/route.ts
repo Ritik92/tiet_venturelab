@@ -77,53 +77,54 @@ export async function GET(
 
 // PATCH /api/mentorships/[id] - Update a mentorship status
 export async function PATCH(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: any }
 ) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session) {
+    if (!session || session.user.role !== "ADMIN") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    
-    const mentorship = await prisma.mentorship.findUnique({
-      where: { id: params.id },
-      include: {
-        product: {
-          select: {
-            userId: true,
-          },
-        },
-      },
+
+    const mentorshipId = params.id;
+    const { status, mentorId, notes } = await request.json();
+
+    // Validate input
+    if (!mentorshipId) {
+      return NextResponse.json({ message: "Mentorship ID is required" }, { status: 400 });
+    }
+
+    // Check if mentorship exists
+    const existingMentorship = await prisma.mentorship.findUnique({
+      where: { id: mentorshipId },
     });
-    
-    if (!mentorship) {
-      return NextResponse.json(
-        { message: "Mentorship not found" },
-        { status: 404 }
-      );
+
+    if (!existingMentorship) {
+      return NextResponse.json({ message: "Mentorship not found" }, { status: 404 });
     }
-    
-    // Check if the user has permission to update this mentorship
-    const isAdmin = session.user.role === "ADMIN";
-    const isMentor = session.user.id === mentorship.mentorId;
-    
-    if (!isAdmin && !isMentor) {
-      return NextResponse.json(
-        { message: "You don't have permission to update this mentorship" },
-        { status: 403 }
-      );
+
+    // If mentorId is provided, verify the mentor exists and has the MENTOR role
+    if (mentorId) {
+      const mentorExists = await prisma.user.findFirst({
+        where: { 
+          id: mentorId,
+          role: "MENTOR"
+        },
+      });
+
+      if (!mentorExists) {
+        return NextResponse.json({ message: "Selected mentor not found or is not a mentor" }, { status: 400 });
+      }
     }
-    
-    const { status, notes } = await req.json();
-    
+
     // Update the mentorship
     const updatedMentorship = await prisma.mentorship.update({
-      where: { id: params.id },
+      where: { id: mentorshipId },
       data: {
-        status,
-        notes,
+        status: status,
+        mentorId: mentorId,
+        notes: notes,
         updatedAt: new Date(),
       },
       include: {
@@ -153,12 +154,12 @@ export async function PATCH(
         },
       },
     });
-    
+
     return NextResponse.json(updatedMentorship);
   } catch (error) {
     console.error("Error updating mentorship:", error);
     return NextResponse.json(
-      { message: "Error updating mentorship" },
+      { message: "Failed to update mentorship" },
       { status: 500 }
     );
   }

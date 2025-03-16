@@ -16,8 +16,8 @@ interface RecentActivityFeedProps {
 export default function RecentActivityFeed({ activities }: RecentActivityFeedProps) {
   if (activities.length === 0) {
     return (
-      <div className="flex items-center justify-center h-40">
-        <p className="text-muted-foreground text-sm">No recent activity</p>
+      <div className="flex items-center justify-center h-40 bg-blue-50 rounded-xl border border-blue-100">
+        <p className="text-blue-500 text-sm">No recent activity</p>
       </div>
     );
   }
@@ -25,16 +25,16 @@ export default function RecentActivityFeed({ activities }: RecentActivityFeedPro
   return (
     <div className="space-y-4">
       {activities.map((activity) => (
-        <div key={activity.id} className="flex items-start space-x-4">
-          <div className="bg-muted rounded-full p-2">
-            {activity.type === 'user' && <Users className="h-4 w-4" />}
-            {activity.type === 'product' && <Package className="h-4 w-4" />}
-            {activity.type === 'mentorship' && <Handshake className="h-4 w-4" />}
+        <div key={activity.id} className="flex items-start space-x-4 p-3 rounded-xl hover:bg-blue-50 transition-colors duration-200">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-400 rounded-full p-2 shadow-sm">
+            {activity.type === 'user' && <Users className="h-4 w-4 text-white" />}
+            {activity.type === 'product' && <Package className="h-4 w-4 text-white" />}
+            {activity.type === 'mentorship' && <Handshake className="h-4 w-4 text-white" />}
           </div>
           <div className="space-y-1">
-            <p className="text-sm font-medium leading-none">{activity.title}</p>
-            <p className="text-sm text-muted-foreground">{activity.description}</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm font-medium leading-none text-gray-800">{activity.title}</p>
+            <p className="text-sm text-gray-600">{activity.description}</p>
+            <p className="text-xs text-blue-500">
               {formatDistanceToNow(activity.timestamp, { addSuffix: true })}
             </p>
           </div>
