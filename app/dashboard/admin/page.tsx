@@ -51,6 +51,7 @@ async function DashboardContent() {
           className="bg-white hover:shadow-md transition-shadow"
         />
         </Link>
+        <Link href={`/dashboard/admin/mentorship`}>
         <StatsCard 
           title="Active Mentorships"
           value={stats.activeMentorships}
@@ -58,6 +59,7 @@ async function DashboardContent() {
           icon={<Handshake className="h-6 w-6 text-blue-500" />}
           className="bg-white hover:shadow-md transition-shadow"
         />
+        </Link>
         <StatsCard 
           title="Funded Projects"
           value={stats.fundedProducts}

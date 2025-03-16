@@ -1,4 +1,3 @@
-// app/dashboard/mentorships/[id]/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -13,23 +12,14 @@ type MentorshipDetail = {
   notes: string | null;
   mentorId: string;
   productId: string;
-  mentor: {
-    id: string;
-    name: string;
-    email: string;
-    bio: string | null;
-  };
+  mentor: { id: string; name: string; email: string; bio: string | null };
   product: {
     id: string;
     title: string;
     description: string;
     status: string;
     category: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-    };
+    user: { id: string; name: string; email: string };
   };
 };
 
@@ -37,44 +27,72 @@ export default function MentorshipDetailPage({ params }: { params: any }) {
   const [mentorship, setMentorship] = useState<MentorshipDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showStatusModal, setShowStatusModal] = useState(false);
-  const [newStatus, setNewStatus] = useState<"ACTIVE" | "COMPLETED" | "TERMINATED">("ACTIVE");
-  const [statusNotes, setStatusNotes] = useState("");
-  const [updating, setUpdating] = useState(false);
+  const [notesOpen, setNotesOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const fetchMentorship = async () => {
       try {
         const response = await fetch(`/api/admin/mentorships/${params.id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch mentorship details');
-        }
+        if (!response.ok) throw new Error("Failed to fetch mentorship details");
         const data = await response.json();
         setMentorship(data);
-        setNewStatus(data.status);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
       } finally {
         setLoading(false);
       }
     };
-
     fetchMentorship();
   }, [params.id]);
 
-  
+  const getStatusStyles = (status: MentorshipDetail["status"]) => {
+    switch (status) {
+      case "ACTIVE":
+        return "bg-green-100 text-green-800";
+      case "COMPLETED":
+        return "bg-blue-100 text-blue-800";
+      case "TERMINATED":
+        return "bg-red-100 text-red-800";
+    }
+  };
 
   if (loading) {
-    return <div className="p-8 text-center">Loading mentorship details...</div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl w-full space-y-6">
+          <div className="h-8 w-1/3 bg-gray-200 rounded"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm space-y-4">
+              <div className="h-6 w-1/4 bg-gray-200 rounded"></div>
+              <div className="space-y-3">
+                <div className="h-4 w-full bg-gray-200 rounded"></div>
+                <div className="h-4 w-full bg-gray-200 rounded"></div>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-sm space-y-4">
+              <div className="h-6 w-1/4 bg-gray-200 rounded"></div>
+              <div className="space-y-3">
+                <div className="h-4 w-full bg-gray-200 rounded"></div>
+                <div className="h-4 w-full bg-gray-200 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (error || !mentorship) {
     return (
-      <div className="p-8 text-center text-red-500">
-        Error: {error || "Mentorship not found"}
-        <div className="mt-4">
-          <Link href="/dashboard/admin/mentorship" className="text-blue-600 hover:underline">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white p-6 rounded-lg shadow-sm text-center max-w-md w-full">
+          <h2 className="text-xl font-semibold text-red-600 mb-2">Error</h2>
+          <p className="text-gray-600 mb-4">{error || "Mentorship not found"}</p>
+          <Link
+            href="/dashboard/admin/mentorship"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
             Back to Mentorships
           </Link>
         </div>
@@ -83,127 +101,128 @@ export default function MentorshipDetailPage({ params }: { params: any }) {
   }
 
   return (
-    <div className="p-4 md:p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Mentorship Details</h1>
-        <div className="space-x-2">
-         
-          <Link 
-            href="/dashboard/admin/mentorship" 
-            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-          >
-            Back to List
-          </Link>
-        </div>
-      </div>
-
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="p-6 border-b">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold">{mentorship.product.title}</h2>
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-              mentorship.status === 'ACTIVE' ? 'bg-green-100 text-green-800' :
-              mentorship.status === 'COMPLETED' ? 'bg-blue-100 text-blue-800' :
-              'bg-red-100 text-red-800'
-            }`}>
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-2xl font-bold text-gray-900">{mentorship.product.title}</h1>
+            <span
+              className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusStyles(mentorship.status)}`}
+            >
               {mentorship.status}
             </span>
           </div>
-          <p className="text-gray-600 mt-2">{mentorship.product.description.substring(0, 150)}...</p>
-        </div>
-
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="text-lg font-medium mb-3">Mentorship Information</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-gray-500">Created At</p>
-                <p>{new Date(mentorship.createdAt).toLocaleDateString()}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Last Updated</p>
-                <p>{new Date(mentorship.updatedAt).toLocaleDateString()}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Product Category</p>
-                <p>{mentorship.product.category}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Product Status</p>
-                <p>{mentorship.product.status}</p>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-3">People</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-sm text-gray-500">Entrepreneur</p>
-                <p>{mentorship.product.user.name} ({mentorship.product.user.email})</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Mentor</p>
-                <p>{mentorship.mentor.name} ({mentorship.mentor.email})</p>
-              </div>
-            </div>
+          <div className="flex space-x-3">
+            <Link
+              href={`/dashboard/admin/mentorship/${mentorship.id}/edit`}
+              className="px-4 py-2 border border-gray-200 text-gray-700 rounded-md hover:bg-gray-100 transition-colors text-sm font-medium"
+            >
+              Edit
+            </Link>
+            <Link
+              href="/dashboard/admin/mentorship"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              Back to List
+            </Link>
           </div>
         </div>
 
-        {mentorship.notes && (
-          <div className="p-6 border-t">
-            <h3 className="text-lg font-medium mb-3">Notes</h3>
-            <div className="bg-gray-50 p-4 rounded whitespace-pre-line">
-              {mentorship.notes}
+        {/* Main Content */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <p className="text-gray-600 mb-8">{mentorship.product.description}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Mentorship Information */}
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">Mentorship Information</h2>
+              <dl className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <dt className="text-sm text-gray-500">Created</dt>
+                    <dd className="text-gray-900">{new Date(mentorship.createdAt).toLocaleDateString()}</dd>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <dt className="text-sm text-gray-500">Updated</dt>
+                    <dd className="text-gray-900">{new Date(mentorship.updatedAt).toLocaleDateString()}</dd>
+                  </div>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Category</dt>
+                  <dd className="text-gray-900">{mentorship.product.category}</dd>
+                </div>
+                <div>
+                  <dt className="text-sm text-gray-500">Product Status</dt>
+                  <dd className="text-gray-900">{mentorship.product.status}</dd>
+                </div>
+              </dl>
+            </div>
+
+            {/* People */}
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-4">People</h2>
+              <dl className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <div>
+                    <dt className="text-sm text-gray-500">Entrepreneur</dt>
+                    <dd className="text-gray-900">
+                      {mentorship.product.user.name} <span className="text-gray-500">({mentorship.product.user.email})</span>
+                    </dd>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <div>
+                    <dt className="text-sm text-gray-500">Mentor</dt>
+                    <dd className="text-gray-900">
+                      {mentorship.mentor.name} <span className="text-gray-500">({mentorship.mentor.email})</span>
+                    </dd>
+                  </div>
+                </div>
+              </dl>
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Status Update Modal */}
-      {showStatusModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-medium mb-4">Update Mentorship Status</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Status</label>
-                <select
-                  value={newStatus}
-                  onChange={(e) => setNewStatus(e.target.value as any)}
-                  className="w-full p-2 border border-gray-300 rounded"
-                >
-                  <option value="ACTIVE">ACTIVE</option>
-                  <option value="COMPLETED">COMPLETED</option>
-                  <option value="TERMINATED">TERMINATED</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium mb-1">Notes about this update</label>
-                <textarea
-                  value={statusNotes}
-                  onChange={(e) => setStatusNotes(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded"
-                  rows={4}
-                  placeholder="Add notes about this status change..."
-                />
-              </div>
-            </div>
-            
-            <div className="flex justify-end space-x-3 mt-6">
+          {/* Notes Section */}
+          {mentorship.notes && (
+            <div className="mt-8 border-t border-gray-200 pt-6">
               <button
-                onClick={() => setShowStatusModal(false)}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+                onClick={() => setNotesOpen(!notesOpen)}
+                className="w-full text-left text-lg font-semibold text-gray-900 flex justify-between items-center"
               >
-                Cancel
+                Notes
+                <svg
+                  className={`w-5 h-5 text-gray-500 transition-transform ${notesOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
-             
+              {notesOpen && (
+                <div className="mt-4 bg-gray-50 p-4 rounded-md text-gray-700 whitespace-pre-wrap">
+                  {mentorship.notes}
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

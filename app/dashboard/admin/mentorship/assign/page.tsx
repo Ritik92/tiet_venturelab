@@ -1,4 +1,3 @@
-// app/dashboard/mentorships/assign/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -103,97 +102,133 @@ export default function AssignMentorshipPage() {
   };
 
   if (loading) {
-    return <div className="p-8 text-center">Loading data...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="flex items-center space-x-2">
+          <div className="w-4 h-4 bg-blue-600 rounded-full animate-pulse"></div>
+          <div className="w-4 h-4 bg-blue-600 rounded-full animate-pulse delay-150"></div>
+          <div className="w-4 h-4 bg-blue-600 rounded-full animate-pulse delay-300"></div>
+          <span className="text-gray-600 font-medium ml-2">Loading data...</span>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Assign New Mentorship</h1>
-      
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
-          {error}
-        </div>
-      )}
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="product" className="block font-medium">
-            Select Product
-          </label>
-          <select
-            id="product"
-            value={selectedProduct}
-            onChange={(e) => setSelectedProduct(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="">-- Select a product --</option>
-            {availableProducts.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.title} (by {product.user.name})
-              </option>
-            ))}
-          </select>
-          {availableProducts.length === 0 && (
-            <p className="text-sm text-gray-500">No available products for mentorship.</p>
-          )}
-        </div>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-100">
+            <h1 className="text-2xl font-medium text-gray-900">Assign New Mentorship</h1>
+          </div>
+          
+          <div className="p-6">
+            {error && (
+              <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-lg flex items-start">
+                <svg className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-1">
+                <label htmlFor="product" className="block text-sm font-medium text-gray-700">
+                  Select Product
+                </label>
+                <div className="mt-1">
+                  <select
+                    id="product"
+                    value={selectedProduct}
+                    onChange={(e) => setSelectedProduct(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    required
+                  >
+                    <option value="">-- Select a product --</option>
+                    {availableProducts.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.title} (by {product.user.name})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {availableProducts.length === 0 && (
+                  <p className="mt-2 text-sm text-gray-500">No available products for mentorship.</p>
+                )}
+              </div>
 
-        <div className="space-y-2">
-          <label htmlFor="mentor" className="block font-medium">
-            Select Mentor
-          </label>
-          <select
-            id="mentor"
-            value={selectedMentor}
-            onChange={(e) => setSelectedMentor(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          >
-            <option value="">-- Select a mentor --</option>
-            {mentors.map((mentor) => (
-              <option key={mentor.id} value={mentor.id}>
-                {mentor.name} ({mentor.email})
-              </option>
-            ))}
-          </select>
-          {mentors.length === 0 && (
-            <p className="text-sm text-gray-500">No mentors available.</p>
-          )}
-        </div>
+              <div className="space-y-1">
+                <label htmlFor="mentor" className="block text-sm font-medium text-gray-700">
+                  Select Mentor
+                </label>
+                <div className="mt-1">
+                  <select
+                    id="mentor"
+                    value={selectedMentor}
+                    onChange={(e) => setSelectedMentor(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    required
+                  >
+                    <option value="">-- Select a mentor --</option>
+                    {mentors.map((mentor) => (
+                      <option key={mentor.id} value={mentor.id}>
+                        {mentor.name} ({mentor.email})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {mentors.length === 0 && (
+                  <p className="mt-2 text-sm text-gray-500">No mentors available.</p>
+                )}
+              </div>
 
-        <div className="space-y-2">
-          <label htmlFor="notes" className="block font-medium">
-            Notes (Optional)
-          </label>
-          <textarea
-            id="notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            rows={4}
-            placeholder="Enter any additional notes about this mentorship..."
-          />
-        </div>
+              <div className="space-y-1">
+                <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+                  Notes (Optional)
+                </label>
+                <div className="mt-1">
+                  <textarea
+                    id="notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                    rows={4}
+                    placeholder="Enter any additional notes about this mentorship..."
+                  />
+                </div>
+              </div>
 
-        <div className="flex justify-end space-x-4">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={submitting || !selectedMentor || !selectedProduct}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-300"
-          >
-            {submitting ? "Assigning..." : "Assign Mentorship"}
-          </button>
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => router.back()}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors shadow-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting || !selectedMentor || !selectedProduct}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? (
+                    <span className="flex items-center">
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Assigning...
+                    </span>
+                  ) : (
+                    "Assign Mentorship"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
