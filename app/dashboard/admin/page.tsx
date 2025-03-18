@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { getDashboardStats } from '@/app/actions/dashboard-actions';
+import { getDashboardStats } from '@/actions/dashboard-actions';
 import StatsCard from '@/components/admin/StatsCard';
 import { BarChart, Users, Package, Handshake } from 'lucide-react';
 import RecentActivityFeed from '@/components/admin/RecentActivityFeed';

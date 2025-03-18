@@ -29,7 +29,7 @@ export default function SignIn() {
         setIsLoading(false);
         return;
       }
-
+      console.log(result);
       // Redirect to dashboard on successful login
       router.push('/dashboard');
     } catch (error) {
