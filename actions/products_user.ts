@@ -1,4 +1,3 @@
-// app/actions/products.ts
 'use server';
 
 import { prisma } from '@/lib/prisma';
@@ -8,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { ProductStatus, Category } from '@prisma/client';
 import { authOptions } from '@/auth.config';
 
-interface GetProductsOptions {
+export interface GetProductsOptions {
   status?: ProductStatus;
   category?: Category;
   limit?: number;
@@ -16,7 +15,18 @@ interface GetProductsOptions {
   search?: string;
 }
 
-export async function getDashboardProducts(options: GetProductsOptions = {}) {
+export interface DashboardProduct {
+  id: string;
+  title: string;
+  category: Category;
+  status: ProductStatus;
+  createdAt: Date;
+  user: {
+    name: string;
+  };
+}
+
+export async function getDashboardProducts(options: GetProductsOptions = {}): Promise<DashboardProduct[]> {
   const session = await getServerSession(authOptions);
   
   if (!session) {
@@ -25,19 +35,11 @@ export async function getDashboardProducts(options: GetProductsOptions = {}) {
   
   const { limit = 10, status, category, search } = options;
   const userId = session.user.id;
-  const userRole = session.user.role;
   
-  // Define base query filters
-  let where: any = {};
-  
-  // Filter by role
-  if (userRole === 'ENTREPRENEUR') {
-    where.userId = userId;
-  } else if (userRole === 'MENTOR') {
-    where.mentorship = {
-      mentorId: userId
-    };
-  }
+  // Define base query filters - always filter by current user
+  const where: any = {
+    userId: userId
+  };
   
   // Apply additional filters
   if (status) {
@@ -55,29 +57,20 @@ export async function getDashboardProducts(options: GetProductsOptions = {}) {
     ];
   }
   
+  // Only select the fields we need
   const products = await prisma.product.findMany({
     where,
     orderBy: { updatedAt: 'desc' },
     take: limit,
-    include: {
+    select: {
+      id: true,
+      title: true,
+      category: true,
+      status: true,
+      createdAt: true,
       user: {
         select: {
-          id: true,
-          name: true,
-          email: true,
-          profileImage: true
-        }
-      },
-      mentorship: {
-        include: {
-          mentor: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              profileImage: true
-            }
-          }
+          name: true
         }
       }
     }

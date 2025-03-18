@@ -1,311 +1,392 @@
-'use client';
-
-import React, { useState } from 'react';
-import { Plus, Edit, Trash2, ExternalLink, ChevronRight, PieChart, FileText, Users } from 'lucide-react';
+// app/dashboard/user/page.tsx
+import React from 'react';
+import { getStats, DashboardStats } from '@/actions/dashboard_user';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Users,
+  Package,
+  TrendingUp,
+  Award,
+  Activity,
+  CheckCircle,
+  Clock,
+  XCircle,
+  CircleDollarSign,
+  LineChart,
+  PlusCircle,
+  ArrowRight,
+  ExternalLink
+} from 'lucide-react';
+import { getDashboardProducts, DashboardProduct } from '@/actions/products_user';
 import Link from 'next/link';
+import { formatDistanceToNow, format } from 'date-fns';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/auth.config';
+import { Session } from 'next-auth';
+import { ProductStatus } from '@prisma/client';
 
-// Types based on your schema
-type ProductStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'FUNDED';
-type Category = 'TECHNOLOGY' | 'HEALTH' | 'EDUCATION' | 'FINANCE' | 'FOOD' | 'RETAIL' | 'ENTERTAINMENT' | 'SUSTAINABILITY' | 'OTHER';
-
-interface Product {
-  id: string;
-  title: string;
-  description: string;
-  status: ProductStatus;
-  category: Category;
-  fundingAmount?: number;
-  createdAt: Date;
-  mentorship?: Mentorship;
-}
-
-interface Mentorship {
-  id: string;
-  mentorId: string;
-  mentor: {
-    name: string;
-    profileImage?: string;
-  };
-  status: 'ACTIVE' | 'COMPLETED' | 'TERMINATED';
-}
-
-interface UserDashboardProps {
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    profileImage?: string;
-    bio?: string;
-  };
-  products: Product[];
-}
-
-const statusColors = {
-  PENDING: 'bg-yellow-100 text-yellow-800',
-  APPROVED: 'bg-green-100 text-green-800',
-  REJECTED: 'bg-red-100 text-red-800',
-  FUNDED: 'bg-blue-100 text-blue-800',
-};
-
-const categoryIcons = {
-  TECHNOLOGY: '💻',
-  HEALTH: '🏥',
-  EDUCATION: '🎓',
-  FINANCE: '💰',
-  FOOD: '🍔',
-  RETAIL: '🛍️',
-  ENTERTAINMENT: '🎬',
-  SUSTAINABILITY: '♻️',
-  OTHER: '📦',
-};
-
-export default function UserDashboard({ user, products: initialProducts }: UserDashboardProps) {
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-  const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'funded'>('all');
+export default async function DashboardPage() {
+  const session = await getServerSession(authOptions) as Session | null;
   
-  // Filter products based on selected tab
-  const filteredProducts = activeTab === 'all' 
-    ? products 
-    : products.filter(product => product.status === activeTab.toUpperCase());
-
-  // Stats summary
-  const stats = {
-    total: products.length,
-    pending: products.filter(p => p.status === 'PENDING').length,
-    approved: products.filter(p => p.status === 'APPROVED').length,
-    rejected: products.filter(p => p.status === 'REJECTED').length,
-    funded: products.filter(p => p.status === 'FUNDED').length,
-    withMentor: products.filter(p => p.mentorship).length,
-  };
-
-  async function handleDeleteProduct(productId: string) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-    
-    try {
-      const response = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE',
-      });
-      
-      if (response.ok) {
-        setProducts(products.filter(p => p.id !== productId));
-      } else {
-        throw new Error('Failed to delete product');
-      }
-    } catch (error) {
-      console.error('Error deleting product:', error);
-      alert('Failed to delete product. Please try again.');
-    }
+  if (!session) {
+    redirect('/login');
   }
+  
+  const stats: DashboardStats = await getStats();
+  const recentProducts: DashboardProduct[] = await getDashboardProducts({ limit: 5 });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="h-10 w-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold">
-              {user.profileImage ? (
-                <img src={user.profileImage} alt={user.name} className="h-10 w-10 rounded-full object-cover" />
-              ) : (
-                user.name.charAt(0)
-              )}
-            </div>
-            <div className="ml-3">
-              <h1 className="text-lg font-semibold text-gray-900">{user.name}</h1>
-              <p className="text-sm text-gray-500">{user.email}</p>
-            </div>
-          </div>
-          <Link href="/profile/edit" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-            Edit Profile
-          </Link>
+    <div className="container mx-auto p-6 max-w-7xl space-y-8">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-5 border-b border-gray-100">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Welcome, {session.user.name}</h1>
+          <p className="text-gray-500 mt-1">
+            Manage your products and track their progress
+          </p>
         </div>
+        <Link href="/dashboard/user/submit-product">
+          <Button className="flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white shadow-sm">
+            <PlusCircle className="h-4 w-4" />
+            <span>New Product</span>
+          </Button>
+        </Link>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                  <PieChart className="h-6 w-6 text-white" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Total Products</dt>
-                    <dd className="flex items-baseline">
-                      <div className="text-2xl font-semibold text-gray-900">{stats.total}</div>
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
-              <div className="text-sm flex justify-between">
-                <span className="font-medium text-indigo-600 hover:text-indigo-500">
-                  {stats.pending} pending
-                </span>
-                <span className="font-medium text-green-600">
-                  {stats.approved} approved
-                </span>
-                <span className="font-medium text-blue-600">
-                  {stats.funded} funded
-                </span>
-              </div>
-            </div>
-          </div>
+      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <StatsCard
+          title="Total Products"
+          value={stats.totalProducts}
+          description={`${stats.statusCounts.APPROVED || 0} approved, ${stats.statusCounts.PENDING || 0} pending`}
+          icon={<Package className="h-5 w-5 text-sky-500" />}
+          color="text-sky-500"
+          bgColor="bg-sky-50"
+          borderColor="border-sky-100"
+        />
+        <StatsCard
+          title="Funded Products"
+          value={stats.statusCounts.FUNDED || 0}
+          description={`$${stats.totalFunding.toLocaleString()} total funding`}
+          icon={<CircleDollarSign className="h-5 w-5 text-emerald-500" />}
+          color="text-emerald-500"
+          bgColor="bg-emerald-50"
+          borderColor="border-emerald-100"
+        />
+        <StatsCard
+          title="Active Mentorships"
+          value={stats.activeMentorships}
+          description="Ongoing product mentorships"
+          icon={<Award className="h-5 w-5 text-amber-500" />}
+          color="text-amber-500"
+          bgColor="bg-amber-50"
+          borderColor="border-amber-100"
+        />
+        <StatsCard
+          title="Approval Rate"
+          value={`${calculateApprovalRate(stats.statusCounts)}%`}
+          description="Products approved vs. submitted"
+          icon={<LineChart className="h-5 w-5 text-indigo-500" />}
+          color="text-indigo-500"
+          bgColor="bg-indigo-50"
+          borderColor="border-indigo-100"
+        />
+      </section>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
-                  <Users className="h-6 w-6 text-white" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Products with Mentors</dt>
-                    <dd className="flex items-baseline">
-                      <div className="text-2xl font-semibold text-gray-900">{stats.withMentor}</div>
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
-              <div className="text-sm">
-                <Link href="/mentors" className="font-medium text-indigo-600 hover:text-indigo-500 flex items-center">
-                  Find mentors <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
+      <section className="grid gap-6 md:grid-cols-2">
+        <StatusOverviewCard stats={stats} />
+        <FundingProgressCard stats={stats} />
+      </section>
 
-          <div className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="px-4 py-5 sm:p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0 bg-purple-500 rounded-md p-3">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-                <div className="ml-5 w-0 flex-1">
-                  <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Resources</dt>
-                    <dd className="flex items-baseline">
-                      <div className="text-lg font-semibold text-gray-900">Pitch Templates, Guides</div>
-                    </dd>
-                  </dl>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-4 sm:px-6">
-              <div className="text-sm">
-                <Link href="/resources" className="font-medium text-indigo-600 hover:text-indigo-500 flex items-center">
-                  Browse resources <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="mb-6 flex justify-between items-center">
-          <h2 className="text-xl font-bold text-gray-900">Your Products</h2>
-          <Link 
-            href="/products/new" 
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            <Plus className="h-4 w-4 mr-2" /> Add New Product
-          </Link>
-        </div>
-
-        {/* Filter Tabs */}
-        <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-8">
-            {(['all', 'pending', 'approved', 'rejected', 'funded'] as const).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`
-                  whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm
-                  ${activeTab === tab 
-                    ? 'border-indigo-500 text-indigo-600' 
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}
-                `}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)} 
-                {tab !== 'all' && ` (${stats[tab]})`}
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* Products List */}
-        {filteredProducts.length === 0 ? (
-          <div className="bg-white shadow sm:rounded-lg p-6 text-center">
-            <p className="text-gray-500">No products found. Add a new product to get started!</p>
-          </div>
-        ) : (
-          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-            <ul className="divide-y divide-gray-200">
-              {filteredProducts.map((product) => (
-                <li key={product.id} className="p-4 hover:bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center min-w-0">
-                      <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-md bg-gray-100 text-lg">
-                        <span>{categoryIcons[product.category]}</span>
-                      </div>
-                      <div className="ml-4 min-w-0">
-                        <div className="flex items-center">
-                          <p className="text-sm font-medium text-indigo-600 truncate">{product.title}</p>
-                          <span className={`ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[product.status]}`}>
-                            {product.status}
-                          </span>
-                        </div>
-                        <p className="text-sm text-gray-500 truncate">{product.description.substring(0, 100)}...</p>
-                        <div className="mt-1 flex items-center text-xs text-gray-500">
-                          <span>Created: {new Date(product.createdAt).toLocaleDateString()}</span>
-                          {product.fundingAmount && (
-                            <span className="ml-3 font-semibold text-green-600">
-                              Funding: ${product.fundingAmount.toLocaleString()}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {product.mentorship && (
-                      <div className="mx-4 flex-shrink-0 flex items-center bg-indigo-50 rounded-full px-3 py-1">
-                        <span className="text-xs text-indigo-700 mr-1">Mentor:</span>
-                        <span className="text-xs font-medium">{product.mentorship.mentor.name}</span>
-                      </div>
-                    )}
-
-                    <div className="ml-4 flex-shrink-0 flex">
-                      <Link 
-                        href={`/products/${product.id}`}
-                        className="mr-2 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500"
-                      >
-                        <ExternalLink className="h-5 w-5" />
-                      </Link>
-                      <Link 
-                        href={`/products/${product.id}/edit`}
-                        className="mr-2 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500"
-                      >
-                        <Edit className="h-5 w-5" />
-                      </Link>
-                      <button
-                        onClick={() => handleDeleteProduct(product.id)}
-                        className="bg-white rounded-full p-1 text-gray-400 hover:text-red-500"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </main>
+      <section>
+        <RecentProductsCard recentProducts={recentProducts} />
+      </section>
     </div>
   );
+}
+
+function calculateApprovalRate(statusCounts: Record<ProductStatus, number>): string {
+  const approved = statusCounts.APPROVED || 0;
+  const rejected = statusCounts.REJECTED || 0;
+  const total = approved + rejected + (statusCounts.PENDING || 0) + (statusCounts.FUNDED || 0);
+  
+  if (total === 0) return '0';
+  
+  const approvedAndFunded = approved + (statusCounts.FUNDED || 0);
+  const rate = (approvedAndFunded / total) * 100;
+  return rate.toFixed(1);
+}
+
+interface StatsCardProps {
+  title: string;
+  value: number | string;
+  description: string;
+  icon: React.ReactNode;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+}
+
+function StatsCard({ title, value, description, icon, color, bgColor, borderColor }: StatsCardProps) {
+  return (
+    <Card className="overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 pt-5">
+        <CardTitle className="text-sm font-medium text-gray-700">{title}</CardTitle>
+        <div className={`p-2 rounded-full ${bgColor} ${borderColor}`}>{icon}</div>
+      </CardHeader>
+      <CardContent>
+        <div className={`text-3xl font-bold ${color}`}>{value}</div>
+        <p className="text-xs text-gray-500 mt-1">{description}</p>
+      </CardContent>
+    </Card>
+  );
+}
+
+interface StatusOverviewCardProps {
+  stats: DashboardStats;
+}
+
+function StatusOverviewCard({ stats }: StatusOverviewCardProps) {
+  return (
+    <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-semibold text-gray-900">Product Status Overview</CardTitle>
+        <CardDescription>Status distribution of your products</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4">
+          <StatusCard 
+            title="Approved" 
+            value={stats.statusCounts.APPROVED || 0} 
+            icon={<CheckCircle className="h-4 w-4 text-emerald-500" />} 
+            bgColor="bg-emerald-50"
+            borderColor="border-emerald-100"
+            textColor="text-emerald-600" 
+          />
+          <StatusCard 
+            title="Pending" 
+            value={stats.statusCounts.PENDING || 0} 
+            icon={<Clock className="h-4 w-4 text-amber-500" />} 
+            bgColor="bg-amber-50"
+            borderColor="border-amber-100"
+            textColor="text-amber-600" 
+          />
+          <StatusCard 
+            title="Funded" 
+            value={stats.statusCounts.FUNDED || 0} 
+            icon={<TrendingUp className="h-4 w-4 text-sky-500" />} 
+            bgColor="bg-sky-50"
+            borderColor="border-sky-100"
+            textColor="text-sky-600" 
+          />
+          <StatusCard 
+            title="Rejected" 
+            value={stats.statusCounts.REJECTED || 0} 
+            icon={<XCircle className="h-4 w-4 text-rose-500" />} 
+            bgColor="bg-rose-50"
+            borderColor="border-rose-100"
+            textColor="text-rose-600" 
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+interface StatusCardProps {
+  title: string;
+  value: number;
+  icon: React.ReactNode;
+  bgColor: string;
+  borderColor: string;
+  textColor: string;
+}
+
+function StatusCard({ title, value, icon, bgColor, borderColor, textColor }: StatusCardProps) {
+  return (
+    <div className={`flex items-center p-4 rounded-lg ${bgColor} border ${borderColor} transition-all hover:shadow-sm`}>
+      <div className="mr-3">{icon}</div>
+      <div>
+        <div className={`text-sm font-medium ${textColor}`}>{title}</div>
+        <div className="text-lg font-bold text-gray-900">{value}</div>
+      </div>
+    </div>
+  );
+}
+
+interface FundingProgressCardProps {
+  stats: DashboardStats;
+}
+
+function FundingProgressCard({ stats }: FundingProgressCardProps) {
+  const fundedCount = stats.statusCounts.FUNDED || 0;
+  const approvedCount = stats.statusCounts.APPROVED || 0;
+  const pendingCount = stats.statusCounts.PENDING || 0;
+  const total = fundedCount + approvedCount + pendingCount + (stats.statusCounts.REJECTED || 0);
+  
+  const fundedPercentage = total > 0 ? (fundedCount / total) * 100 : 0;
+  const approvedPercentage = total > 0 ? (approvedCount / total) * 100 : 0;
+  const pendingPercentage = total > 0 ? (pendingCount / total) * 100 : 0;
+  
+  return (
+    <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-semibold text-gray-900">Funding Progress</CardTitle>
+        <CardDescription>Track your products' journey to funding</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="font-medium text-emerald-600 flex items-center gap-1.5">
+              <CircleDollarSign className="h-4 w-4" /> Funded
+            </span>
+            <span className="text-gray-600">{fundedCount} of {total} ({fundedPercentage.toFixed(1)}%)</span>
+          </div>
+          <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+            <div className="bg-emerald-500 h-2.5 rounded-full" style={{ width: `${fundedPercentage}%` }}></div>
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="font-medium text-sky-600 flex items-center gap-1.5">
+              <CheckCircle className="h-4 w-4" /> Approved
+            </span>
+            <span className="text-gray-600">{approvedCount} of {total} ({approvedPercentage.toFixed(1)}%)</span>
+          </div>
+          <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+            <div className="bg-sky-500 h-2.5 rounded-full" style={{ width: `${approvedPercentage}%` }}></div>
+          </div>
+        </div>
+        
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="font-medium text-amber-600 flex items-center gap-1.5">
+              <Clock className="h-4 w-4" /> Pending
+            </span>
+            <span className="text-gray-600">{pendingCount} of {total} ({pendingPercentage.toFixed(1)}%)</span>
+          </div>
+          <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+            <div className="bg-amber-500 h-2.5 rounded-full" style={{ width: `${pendingPercentage}%` }}></div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+interface RecentProductsCardProps {
+  recentProducts: DashboardProduct[];
+}
+
+function RecentProductsCard({ recentProducts }: RecentProductsCardProps) {
+  return (
+    <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-lg font-semibold text-gray-900">Recent Products</CardTitle>
+            <CardDescription>Your recently added products</CardDescription>
+          </div>
+          <Link href="/dashboard/user/myproducts">
+            <Button variant="outline" size="sm" className="h-9 hover:bg-gray-50 hover:text-sky-600 hover:border-sky-200 transition-colors">
+              View all <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            </Button>
+          </Link>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="rounded-lg border border-gray-200 overflow-hidden">
+          <div className="grid grid-cols-12 p-4 text-sm font-medium text-gray-500 bg-gray-50">
+            <div className="col-span-5">Title</div>
+            <div className="col-span-3">Category</div>
+            <div className="col-span-2">Status</div>
+            <div className="col-span-2">Created</div>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {recentProducts.length > 0 ? (
+              recentProducts.map((product) => (
+                <div key={product.id} className="grid grid-cols-12 p-4 text-sm items-center hover:bg-gray-50 transition-colors">
+                  <div className="col-span-5 font-medium truncate">
+                    <Link href={`/products/${product.id}`} className="hover:text-sky-600 text-gray-900 transition-colors flex items-center gap-1.5 group">
+                      {product.title}
+                      <ExternalLink className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                  </div>
+                  <div className="col-span-3 text-gray-600 flex items-center gap-1.5">
+                    <span>{getCategoryIcon(product.category)}</span>
+                    <span>{formatCategory(product.category.toLowerCase())}</span>
+                  </div>
+                  <div className="col-span-2">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
+                      ${product.status === 'APPROVED' && 'bg-emerald-100 text-emerald-800 border border-emerald-200'}
+                      ${product.status === 'PENDING' && 'bg-amber-100 text-amber-800 border border-amber-200'}
+                      ${product.status === 'REJECTED' && 'bg-rose-100 text-rose-800 border border-rose-200'}
+                      ${product.status === 'FUNDED' && 'bg-sky-100 text-sky-800 border border-sky-200'}
+                    `}>
+                      {product.status.charAt(0) + product.status.slice(1).toLowerCase()}
+                    </span>
+                  </div>
+                  <div className="col-span-2 text-gray-500">
+                    {formatDistanceToNow(new Date(product.createdAt), { addSuffix: true })}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-12 text-center">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="p-3 bg-gray-50 rounded-full">
+                    <Package className="h-8 w-8 text-gray-400" />
+                  </div>
+                  <p className="text-gray-600">No products found</p>
+                  <Link href="/dashboard/user/submit-product">
+                    <Button variant="outline" size="sm" className="mt-2 hover:bg-sky-50 hover:text-sky-600 hover:border-sky-200 transition-colors">
+                      Create your first product
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </CardContent>
+      {recentProducts.length > 0 && (
+        <CardFooter className="border-t pt-5 flex justify-end">
+          <Link href="/dashboard/user/submit-product">
+            <Button className="bg-sky-600 hover:bg-sky-700 shadow-sm">
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Add New Product
+            </Button>
+          </Link>
+        </CardFooter>
+      )}
+    </Card>
+  );
+}
+
+// Helper functions
+function getCategoryIcon(category: string) {
+  switch (category) {
+    case 'TECHNOLOGY': return '💻';
+    case 'HEALTH': return '🏥';
+    case 'EDUCATION': return '🎓';
+    case 'FINANCE': return '💰';
+    case 'FOOD': return '🍔';
+    case 'RETAIL': return '🛍️';
+    case 'ENTERTAINMENT': return '🎬';
+    case 'SUSTAINABILITY': return '♻️';
+    case 'OTHER': return '📦';
+    default: return '📦';
+  }
+}
+
+function formatCategory(category: string) {
+  return category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
 }
