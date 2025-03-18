@@ -1,565 +1,783 @@
-"use client"
-import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import {
-  FaCalendarAlt,
-  FaTrophy,
-  FaUsers,
-  FaLaptop,
-  FaMapMarkerAlt,
-  FaArrowRight,
-  FaInfoCircle,
-  FaCheckCircle,
-  FaBars,
-  FaTimes,
-} from "react-icons/fa"
+'use client';
+import { useState, useEffect, useRef } from 'react';
+import Head from 'next/head';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaArrowRight, FaLinkedin, FaTwitter, FaGithub, FaEnvelope, FaMapMarkerAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
-// Define the Event type
-interface Event {
-  id: number
-  title: string
-  presentedBy: string
-  collaboration: string
-  overview: string
-  timeline: { activity: string; date: string }[]
-  domains: string[]
-  prizes: { position: string; amount: string }[]
-  phases: { name: string; description: string }[]
-  criteria: { name: string; weight: string }[]
-  contacts: { name: string; role: string; email: string; phone: string }[]
-  status: "active" | "upcoming" | "past"
-  registrationLink: string
-}
 
 // Animation variants
+
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+};
 
 const staggerChildren = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-}
+};
 
-export default function EventsPage() {
-  // Mock data for events
-  const eventsData: Event[] = [
-    {
-      id: 1,
-      title: "Startup Ignite",
-      presentedBy: "Mentor Labs",
-      collaboration: "Computer Science Department, Thapar Institute",
-      overview:
-        "Startup Ignite is an inter-college event aimed at sparking entrepreneurial innovation among students. Participants will present startup ideas, evaluated on feasibility, creativity, and scalability, to compete for a ₹50,000 prize pool.",
-      timeline: [
-        { activity: "Registrations Open", date: "16th March 2025" },
-        { activity: "Idea Submission Deadline", date: "21st March 2025" },
-        { activity: "Shortlist Announcement", date: "26th March 2025" },
-        { activity: "Semi-Final Presentation", date: "29th March 2025" },
-        { activity: "Final Presentation", date: "3rd April 2025" },
-      ],
-      domains: ["Agritech", "Edtech", "Healthtech", "Fintech", "E-commerce", "AI/ML", "Cybersecurity", "Open Domain"],
-      prizes: [
-        { position: "1st Prize", amount: "₹20,000" },
-        { position: "2nd Prize (2 teams)", amount: "₹10,000 each" },
-        { position: "3rd Prize (2 teams)", amount: "₹5,000 each" },
-      ],
-      phases: [
-        {
-          name: "Idea Screening (Online)",
-          description:
-            "Judges select the top 45-50 teams based on innovation, feasibility, market potential, and scalability.",
-        },
-        {
-          name: "Semi-Final Pitch (Online)",
-          description: "Shortlisted teams present a 10-minute pitch. Judges advance the top 30 teams.",
-        },
-        {
-          name: "Final Presentation (Offline)",
-          description:
-            "Finalists pitch their refined ideas at Thapar Institute. Judges evaluate feasibility, presentation quality, and execution potential.",
-        },
-      ],
-      criteria: [
-        { name: "Innovation", weight: "20%" },
-        { name: "Feasibility", weight: "30%" },
-        { name: "Market Potential", weight: "20%" },
-        { name: "Scalability", weight: "20%" },
-        { name: "Pitch Quality", weight: "10%" },
-      ],
-      contacts: [
-        { name: "Tathagat", role: "Mentor Labs Convenor", email: "tathagat@mentorlabs.org", phone: "+91 9041095531" },
-        {
-          name: "Dr. Prashant Singh Rana",
-          role: "Thapar Institute Coordinator",
-          email: "prashant.singh@tiet.edu",
-          phone: "+91 93138-89932",
-        },
-      ],
-      status: "active", // active, upcoming, past
-      registrationLink: "https://www.talkeys.xyz/event/67d85244889a3e9ccb3f5b52",
-    },
-  ]
+export default function LandingPage() {
+  const router=useRouter();
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const newsRef = useRef(null);
 
-  const router = useRouter()
-
-  // State management with proper typing
-  const [events, setEvents] = useState<Event[]>(eventsData)
-  const [activeTab, setActiveTab] = useState("all")
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
-
-  // Handle scroll for navbar transparency effect
   useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev === newsItems.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    
     const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-
-    window.addEventListener("scroll", handleScroll)
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+      clearInterval(interval);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
-  const currentDate = new Date()
-  const formattedDate = currentDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
+  const newsItems = [
+    { title: "Mentor Labs Launches New Startup Accelerator Program", date: "March 12, 2025" },
+    { title: "Strategic Mentorship Sessions Open for Early-Stage Founders", date: "March 10, 2025" },
+    { title: "Funding Workshop: Connect with Investors Next Month", date: "March 08, 2025" },
+    { title: "Mentor Labs Partners with Global Venture Capital Firms", date: "March 05, 2025" },
+    { title: "Entrepreneur Networking Event: Building Sustainable Startups", date: "March 03, 2025" },
+    { title: "Success Story: Mentor Labs Startup Secures $2M in Funding", date: "February 28, 2025" },
+    { title: "New Growth Strategy Masterclass Announced for April", date: "February 25, 2025" },
+  ];
 
-  // Filter events based on activeTab
-  const filteredEvents = events.filter((event) => {
-    if (activeTab === "all") return true
-    return event.status === activeTab
-  })
+  const stats = [
+    { number: "50+", text: "Startups Mentored" },
+    { number: "25+", text: "Funding Connections" },
+    { number: "40+", text: "Expert Mentors" },
+    { number: "15+", text: "Industry Partners" },
+  ];
 
-  // Simple empty state component
-  const EmptyState = () => (
-    <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-8 text-center my-8">
-      <FaCalendarAlt className="mx-auto text-indigo-500 text-4xl mb-4" />
-      <h3 className="text-xl font-bold text-gray-800 mb-2">No Events Found</h3>
-      <p className="text-gray-600 mb-4">There are no events matching your current filter.</p>
-      <button
-        onClick={() => setActiveTab("all")}
-        className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-      >
-        View All Events
-      </button>
-    </div>
-  )
+  const thematicAreas = [
+    { 
+      title: "Strategic Mentorship", 
+      description: "Personalized guidance from seasoned entrepreneurs and business leaders tailored to your unique journey and challenges.", 
+      icon: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    { 
+      title: "Funding Access", 
+      description: "Connecting startups with investors through pitch refinement, business plan development, and direct introductions to our network.", 
+      icon: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    { 
+      title: "Growth Strategies", 
+      description: "Developing scalable strategies for market expansion, operational optimization, and sustainable long-term business growth.", 
+      icon: "https://images.unsplash.com/photo-1563206767-5b18f218e8de?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    { 
+      title: "Community Building", 
+      description: "Creating a network of like-minded entrepreneurs and innovators to foster collaboration and shared learning experiences.", 
+      icon: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    { 
+      title: "Sustainable Impact", 
+      description: "Fostering businesses that address pressing challenges while maintaining social and environmental responsibility.", 
+      icon: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60"
+    },
+    { 
+      title: "Global Expansion", 
+      description: "Supporting startups in breaking geographical boundaries through international partnerships and market entry strategies.", 
+      icon: "https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+  ];
+
+
+  const fundingPrograms = [
+    {
+      title: "Early-Stage Mentorship",
+      description:
+        "Our flagship program for startups at the ideation phase. Receive personalized guidance from industry experts who bring decades of experience to help validate your idea, craft a business model, and set the foundation for your entrepreneurial journey.",
+      icon: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    {
+      title: "Funding Readiness Program",
+      description:
+        "Designed for startups looking to secure investment. Our experts will help refine your pitch deck, polish your business plan, and connect you with our network of venture capitalists and angel investors to ensure you're well-prepared to secure the resources you need.",
+      icon: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    {
+      title: "Growth Accelerator",
+      description:
+        "For established startups looking to scale. Our growth experts will analyze your market, identify key opportunities, and design scalable strategies that allow your business to expand sustainably across new markets and customer segments.",
+      icon: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+    {
+      title: "Innovation Partnerships",
+      description:
+        "Connect with industry leaders to collaborate on innovative solutions. This program bridges the gap between startups and established companies, creating opportunities for joint ventures, pilot programs, and strategic partnerships.",
+      icon: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+    },
+  ];
+
+  const teamMembers = [
+    {
+      name: "Dr. Prashant Singh Rana",
+      role: "Assistant Professor of Computer Science, TIET",
+      description:
+        "Dr. Rana is a leading researcher in machine learning and data science at TIET. His work focuses on developing novel ML algorithms and their applications in real-world problems.",
+      image: '/ranasir.png',
+    },
+    {
+      name: "Mr. Tathagat",
+      role: "Director of Bragfit",
+      description: 
+        "A serial entrepreneur with 8+ years of experience in digital innovation, affiliate marketing and brand building. Mentor at IEEE Student Branch and Entrepreneurship-Cell, delivered sessions at 50+ colleges and featured in 11+ news websites.",
+      image: "/tathagat.png",
+    },
+   
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      {/* Navigation Bar - Enhanced with gradient */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrollY > 50 ? "bg-white/95 backdrop-blur-sm shadow-md" : "bg-gradient-to-r from-blue-900 to-purple-900"
-        }`}
+    <>
+       <Head>
+        <title>Mentor Labs | Where Ideas Meet Opportunity</title>
+        <meta name="description" content="Mentor Labs - Empowering Entrepreneurs" />
+        <link rel="icon" href="/favicon.ico" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
+        <style jsx global>{`
+          body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+          }
+          h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+          }
+        `}</style>
+      </Head>
+
+      <div className="min-h-screen bg-white text-gray-800">
+        {/* Navigation */}
+       
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrollY > 50 ? 'bg-white/95 backdrop-blur-sm shadow-lg py-3' : 'bg-transparent py-5'}`}>
+  <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    {/* Logo Section */}
+    <motion.div 
+      initial={{ opacity: 0, x: -20 }} 
+      animate={{ opacity: 1, x: 0 }} 
+      transition={{ duration: 0.5 }}
+      className="flex items-center"
+    >
+      <h1 className={`text-xl sm:text-2xl font-bold tracking-tight ${scrollY > 50 ? 'text-blue-900' : 'text-white'}`}>
+      Mentor  <span className="text-blue-500">Labs</span>
+      </h1>
+    </motion.div>
+
+    {/* Mobile Menu Button */}
+    <div className="md:hidden">
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className={`p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${scrollY > 50 ? 'text-blue-900' : 'text-white'}`}
+        aria-label="Toggle menu"
+        aria-expanded={isMenuOpen}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-            <h1
-              className={`text-2xl font-bold transition-colors duration-300 ${scrollY > 50 ? "text-gray-900" : "text-white"}`}
-            >
-              Mentor <span className={`${scrollY > 50 ? "text-indigo-600" : "text-indigo-300"}`}>Labs</span>
-            </h1>
-          </div>
+        {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+      </button>
+    </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`p-2 ${scrollY > 50 ? "text-gray-800" : "text-white"} focus:outline-none`}
-            >
-              {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
-          </div>
+    {/* Desktop Navigation */}
+    <div className="hidden md:flex items-center space-x-8">
+      {['Home', 'About', 'People', 'Research', 'Programs', 'Contact'].map((item) => (
+        <Link
+          key={item}
+          href={`#${item.toLowerCase()}`}
+          className={`relative font-medium transition-all duration-300 group ${
+            scrollY > 50 ? 'text-gray-800' : 'text-white'
+          }`}
+        >
+          <span className="group-hover:text-blue-500">{item}</span>
+          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300"></span>
+        </Link>
+      ))}
+      <Link
+        
+          href={`/dashboard/user/events`}
+          className={`relative font-medium transition-all duration-300 group ${
+            scrollY > 50 ? 'text-gray-800' : 'text-white'
+          }`}
+        >
+          <span className="group-hover:text-blue-500">Events</span>
+          <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 group-hover:w-full transition-all duration-300"></span>
+        </Link>
+      <button onClick={() => router.push('/auth/signin')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg  transform hover:-translate-y-0.5">
+        Log in
+      </button>
+    </div>
+  </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {["Home", "About", "People", "Research", "Programs", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className={`relative font-medium transition-all duration-300 group ${
-                  scrollY > 50 ? "text-gray-800" : "text-white"
-                }`}
-              >
-                <span className={`group-hover:${scrollY > 50 ? "text-indigo-600" : "text-indigo-300"}`}>{item}</span>
-                <span
-                  className={`absolute bottom-0 left-0 w-0 h-0.5 ${scrollY > 50 ? "bg-indigo-600" : "bg-indigo-300"} group-hover:w-full transition-all duration-300`}
-                ></span>
-              </Link>
-            ))}
+  {/* Mobile Navigation */}
+  <AnimatePresence>
+    {isMenuOpen && (
+      <motion.div
+        initial={{ opacity: 0, height: 0 }}
+        animate={{ opacity: 1, height: 'auto' }}
+        exit={{ opacity: 0, height: 0 }}
+        transition={{ duration: 0.3 }}
+        className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg border-t border-gray-100"
+      >
+        <div className="px-4 py-4 space-y-2">
+          {['Home', 'About', 'People', 'Research', 'Programs', 'Contact'].map((item) => (
             <Link
-              href={`/dashboard/user/events`}
-              className={`relative font-medium transition-all duration-300 group ${
-                scrollY > 50 ? "text-gray-800" : "text-white"
-              }`}
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              className="block text-gray-800 hover:text-blue-500 transition-colors py-3 px-2 rounded-md hover:bg-gray-100 font-medium"
+              onClick={() => setIsMenuOpen(false)}
             >
-              <span className={`group-hover:${scrollY > 50 ? "text-indigo-600" : "text-indigo-300"}`}>Events</span>
-              <span
-                className={`absolute bottom-0 left-0 w-0 h-0.5 ${scrollY > 50 ? "bg-indigo-600" : "bg-indigo-300"} group-hover:w-full transition-all duration-300`}
-              ></span>
+              {item}
             </Link>
-            <button
-              onClick={() => router.push("/auth/signin")}
-              className={`${
-                scrollY > 50 ? "bg-indigo-600 hover:bg-indigo-700" : "bg-white text-indigo-900 hover:bg-indigo-100"
-              } px-4 py-2 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5`}
-            >
-              Log in
-            </button>
+          ))}
+          <button  onClick={()=>{router.push('/auth/signin')}} className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg mt-2">
+            Log in
+          </button>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</nav>
+
+        {/* Hero Section */}
+       
+<section id="home" className="relative min-h-screen flex items-center justify-center py-28 md:py-0">
+  <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-purple-900 opacity-90"></div>
+    <img 
+      src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80" 
+      alt="AI Background" 
+      className="w-full h-full object-cover"
+    />
+  </div>
+  <div className="container mx-auto px-8 relative z-10">
+    <div className="flex flex-col md:flex-row items-center md:gap-12">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={staggerChildren}
+        className="md:w-1/2 text-white mb-16 md:mb-0"
+      >
+        <motion.h2 variants={fadeInUp} className="text-xl md:text-2xl font-medium mb-3 text-blue-300">
+        MENTOR <span className="text-blue-400">LABS</span>
+        </motion.h2>
+        <motion.h1 variants={fadeInUp} className="text-4xl md:text-6xl font-bold mb-8">
+        Where Ideas Meet Opportunity
+        </motion.h1>
+        <motion.p variants={fadeInUp} className="text-lg md:text-xl mb-10 max-w-lg text-blue-100 leading-relaxed">
+        Empowering entrepreneurs with personalized guidance, funding connections, and strategic growth expertise to transform bold ideas into impactful ventures.   </motion.p>
+        <motion.div variants={fadeInUp} className="flex space-x-6">
+          
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="border-2 border-white hover:bg-white/15 text-white px-8 py-4 rounded-md font-medium transition-all"
+          >
+            Join Our Team
+          </motion.button>
+        </motion.div>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.8 }}
+        className="md:w-1/2"
+        ref={newsRef}
+      >
+        <div className="relative h-80 md:h-96 bg-white/10 backdrop-blur-sm rounded-xl shadow-2xl overflow-hidden border border-white/20 transform md:rotate-1 hover:rotate-0 transition-transform duration-500">
+          <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-blue-500 to-purple-500 py-4 px-6 text-white">
+            <h3 className="font-semibold text-lg">Latest News & Insights</h3>
+          </div>
+          <div className="pt-16 p-8 h-full overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeSlide}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="text-white"
+              >
+                <h3 className="text-xl md:text-2xl font-semibold mb-3">{newsItems[activeSlide].title}</h3>
+                <p className="text-sm text-blue-200 mb-3">{newsItems[activeSlide].date}</p>
+                <button className="mt-6 text-blue-300 hover:text-blue-100 flex items-center text-sm font-medium group">
+                  Read more <FaArrowRight className="ml-2 group-hover:ml-3 transition-all" />
+                </button>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+          <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-3">
+            {newsItems.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  activeSlide === index ? 'bg-blue-400 scale-125' : 'bg-white/40'
+                }`}
+              />
+            ))}
           </div>
         </div>
+      </motion.div>
+    </div>
+  </div>
+  <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+    <FaArrowRight className="rotate-90" size={24} />
+  </div>
+</section>
 
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden bg-white/95 backdrop-blur-sm shadow-lg border-t border-gray-100"
-            >
-              <div className="px-4 py-4 space-y-2">
-                {["Home", "About", "People", "Research", "Programs", "Contact"].map((item) => (
-                  <Link
-                    key={item}
-                    href={`#${item.toLowerCase()}`}
-                    className="block text-gray-800 hover:text-indigo-600 transition-colors py-3 px-2 rounded-md hover:bg-gray-100 font-medium"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item}
-                  </Link>
-                ))}
-                <button
-                  onClick={() => {
-                    router.push("/auth/signin")
-                  }}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg mt-2"
-                >
-                  Log in
+        {/* Stats Section */}
+       
+<section className="py-20 bg-gray-50">
+  <div className="container mx-auto px-8">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerChildren}
+      viewport={{ once: true }}
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+    >
+      {stats.map((stat, index) => (
+        <motion.div
+          key={index}
+          variants={fadeInUp}
+          className="bg-white p-8 rounded-lg shadow-lg border-t-4 border-blue-500 hover:shadow-xl transition-all"
+        >
+          <h3 className="text-4xl font-bold text-blue-600 mb-3">{stat.number}</h3>
+          <p className="text-gray-700 font-medium">{stat.text}</p>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+</section>
+
+        {/* About Section */}
+       
+<section id="about" className="py-28 bg-white">
+  <div className="container mx-auto px-8">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={fadeInUp}
+      viewport={{ once: true }}
+      className="text-center mb-20"
+    >
+      <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">About Us</h2>
+      <h3 className="text-3xl md:text-4xl font-bold mb-5">Mentor Labs</h3>
+      <div className="w-24 h-1 bg-blue-500 mx-auto"></div>
+    </motion.div>
+    <div className="flex flex-col md:flex-row items-center gap-16">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+        className="md:w-1/2"
+      >
+        <div className="relative">
+          <img 
+            src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+            alt="Researchers collaborating" 
+            className="rounded-lg shadow-xl"
+          />
+          <div className="absolute -bottom-6 -right-6 bg-blue-500 text-white p-5 rounded-lg shadow-lg">
+            <p className="font-bold text-xl">Est. 2025</p>
+          </div>
+        </div>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        viewport={{ once: true }}
+        className="md:w-1/2"
+      >
+        <h3 className="text-2xl font-bold text-blue-900 mb-6">Your Trusted Partner in Entrepreneurship</h3>
+        <p className="text-gray-700 text-lg leading-relaxed mb-6">
+  At Mentor Labs, we understand that entrepreneurship is not just a career path—it's a deeply personal journey filled with highs and lows. We exist to be your trusted partner in turning your dreams into milestones and your ideas into impactful ventures.
+</p>
+<p className="text-gray-700 text-lg leading-relaxed mb-10">
+  We don't just believe in startups—we believe in the people behind them. You have the vision and the courage to dream big. What you need is a guiding hand, a network of supporters, and the tools to shape your dreams into tangible success stories.
+</p>
+        <div className="space-y-5">
+        <div className="flex items-start">
+  <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
+    1
+  </div>
+  <p className="text-gray-700 text-lg">Personalized mentorship from seasoned entrepreneurs and business leaders</p>
+</div>
+<div className="flex items-start">
+  <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
+    2
+  </div>
+  <p className="text-gray-700 text-lg">Connections to investors through pitch refinement and direct introductions</p>
+</div>
+<div className="flex items-start">
+  <div className="bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center mr-5 flex-shrink-0 shadow-md">
+    3
+  </div>
+  <p className="text-gray-700 text-lg">Scalable growth strategies for sustainable business expansion and impact</p>
+</div>
+        </div>
+      </motion.div>
+    </div>
+  </div>
+</section>
+
+        {/* Vision & Mission Section */}
+        
+<section className="py-28 bg-blue-900 text-white">
+  <div className="container mx-auto px-8">
+    <div className="text-center mb-20">
+      <h2 className="text-3xl md:text-4xl font-bold mb-6">Our Vision & Mission</h2>
+      <div className="w-24 h-1 bg-blue-400 mx-auto"></div>
+    </div>
+    <div className="max-w-4xl mx-auto text-center">
+      <p className="text-2xl md:text-3xl italic font-light mb-16 text-blue-200">
+      "Turning dreams into reality, creating the future together, one startup at a time"
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Empathy Meets Expertise</h3>
+  <p className="text-blue-100 leading-relaxed">
+    Our mentors approach your challenges with empathy, having faced similar struggles themselves, providing a balanced perspective that is both practical and inspiring.
+  </p>
+</div>
+<div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Your Vision, Our Mission</h3>
+  <p className="text-blue-100 leading-relaxed">
+    We don't impose cookie-cutter solutions. We take time to understand your vision and co-create strategies that align with your goals.
+  </p>
+</div>
+<div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Power of Connection</h3>
+  <p className="text-blue-100 leading-relaxed">
+    We pride ourselves on being the bridge that connects you to opportunities, whether through funding, resources, or collaborations.
+  </p>
+</div>
+<div className="bg-white/10 rounded-lg p-10 backdrop-blur-sm border border-white/10 hover:border-blue-400/30 transition-all transform hover:-translate-y-1 duration-300">
+  <h3 className="text-xl font-bold mb-5 text-blue-300">Sustainability and Impact</h3>
+  <p className="text-blue-100 leading-relaxed">
+    We are committed to fostering businesses that are not only profitable but also socially and environmentally responsible.
+  </p>
+</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+        {/* People Section */}
+       
+<section id="people" className="py-28 bg-white">
+  <div className="container mx-auto px-8">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={fadeInUp}
+      viewport={{ once: true }}
+      className="text-center mb-20"
+    >
+      <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">Our Team</h2>
+      <h3 className="text-3xl md:text-4xl font-bold mb-5">Leadership & Expertise</h3>
+      <div className="w-24 h-1 bg-blue-500 mx-auto"></div>
+    </motion.div>
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerChildren}
+      viewport={{ once: true }}
+      className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto"
+    >
+      {teamMembers.map((person, index) => (
+        <motion.div
+          key={index}
+          variants={fadeInUp}
+          className="bg-white rounded-lg shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 group"
+        >
+          <div className="relative h-72 overflow-hidden">
+            <img src={person.image} alt={person.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
+            <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <div className="flex space-x-5 justify-center">
+                <a href="#" className="text-white hover:text-blue-300 transition-colors transform hover:scale-110">
+                  <FaLinkedin size={24} />
+                </a>
+                <a href="#" className="text-white hover:text-blue-300 transition-colors transform hover:scale-110">
+                  <FaTwitter size={24} />
+                </a>
+                <a href="#" className="text-white hover:text-blue-300 transition-colors transform hover:scale-110">
+                  <FaGithub size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="p-8">
+            <h3 className="text-xl font-bold text-blue-900 mb-3">{person.name}</h3>
+            <p className="text-blue-600 font-medium mb-5">{person.role}</p>
+            <p className="text-gray-700 leading-relaxed">{person.description}</p>
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+    <div className="text-center mt-16">
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="bg-blue-100 text-blue-800 hover:bg-blue-200 px-10 py-4 rounded-md font-medium transition-colors shadow-md"
+      >
+        Meet Our Full Team <FaArrowRight className="ml-2 inline" />
+      </motion.button>
+    </div>
+  </div>
+</section>
+
+        {/* Research Themes Section */}
+       
+<section id="research" className="py-28 bg-gray-50">
+  <div className="container mx-auto px-8">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={fadeInUp}
+      viewport={{ once: true }}
+      className="text-center mb-20"
+    >
+     <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">Our Services</h2>
+     <h3 className="text-3xl md:text-4xl font-bold mb-5">Comprehensive Offerings</h3>  <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
+     <p className="max-w-2xl mx-auto text-gray-700 text-lg">
+  At Mentor Labs, our services go beyond traditional mentoring. We are an incubator for growth, innovation, and excellence.
+</p>
+    </motion.div>
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={staggerChildren}
+      viewport={{ once: true }}
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+    >
+      {thematicAreas.map((area, index) => (
+        <motion.div
+          key={index}
+          variants={fadeInUp}
+          className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group transform hover:-translate-y-2"
+        >
+          <div className="relative h-52 overflow-hidden">
+            <img src={area.icon} alt={area.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-blue-900 to-transparent opacity-70"></div>
+            <h3 className="absolute bottom-5 left-6 text-white text-xl font-bold">{area.title}</h3>
+          </div>
+          <div className="p-8">
+            <p className="text-gray-700 leading-relaxed mb-4">{area.description}</p>
+           
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+  </div>
+</section>
+  
+          {/* Programs Section */}
+          
+<section id="programs" className="py-28 bg-white">
+  <div className="container mx-auto px-8">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      variants={fadeInUp}
+      viewport={{ once: true }}
+      className="text-center mb-20"
+    >
+      <h2 className="text-sm text-blue-600 font-semibold uppercase tracking-wide mb-3">Opportunities</h2>
+      <h3 className="text-3xl md:text-4xl font-bold mb-5">Funding Programs</h3>
+      <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
+      <p className="max-w-2xl mx-auto text-gray-700 text-lg">
+        We offer various funding opportunities to support research, student development, and collaborative projects.
+      </p>
+    </motion.div>
+    <div className="flex flex-col space-y-8">
+      <div className="flex items-center justify-center space-x-6 mb-8">
+        {[1, 2, 3, 4].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-8 py-3 rounded-full transition-all ${
+              activeTab === tab
+                ? 'bg-blue-500 text-white shadow-md transform scale-105'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Program {tab}
+          </button>
+        ))}
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4 }}
+        >
+          <div className="bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
+            <div className="md:flex">
+              <div className="md:w-2/5 relative h-72 md:h-auto">
+                <img
+                  src={fundingPrograms[activeTab - 1].icon}
+                  alt={fundingPrograms[activeTab - 1].title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-transparent opacity-70"></div>
+              </div>
+              <div className="p-10 md:w-3/5">
+                <h3 className="text-2xl font-bold text-blue-900 mb-5">{fundingPrograms[activeTab - 1].title}</h3>
+                <p className="text-gray-700 mb-8 leading-relaxed text-lg">
+                  {fundingPrograms[activeTab - 1].description}
+                </p>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-md font-medium transition-all shadow-md hover:shadow-lg inline-flex items-center">
+                  Apply Now <FaArrowRight className="ml-3" />
                 </button>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
-        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="mb-10 text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Events & Competitions</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Discover and participate in our upcoming entrepreneurial events
-          </p>
-          <p className="text-sm text-gray-500 mt-2">{formattedDate}</p>
+            </div>
+          </div>
         </motion.div>
-
-        {/* Event filters - Updated with indigo color scheme */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          <button
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === "all" ? "bg-indigo-600 text-white shadow-md" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"}`}
-            onClick={() => setActiveTab("all")}
-          >
-            All Events
-          </button>
-          <button
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === "upcoming" ? "bg-indigo-600 text-white shadow-md" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"}`}
-            onClick={() => setActiveTab("upcoming")}
-          >
-            Upcoming
-          </button>
-          <button
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === "active" ? "bg-indigo-600 text-white shadow-md" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"}`}
-            onClick={() => setActiveTab("active")}
-          >
-            Active
-          </button>
-          <button
-            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${activeTab === "past" ? "bg-indigo-600 text-white shadow-md" : "bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"}`}
-            onClick={() => setActiveTab("past")}
-          >
-            Past
-          </button>
-        </div>
-
-        {/* Conditional rendering - simplified */}
-        {filteredEvents.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <motion.div variants={staggerChildren} initial="hidden" animate="visible" className="grid grid-cols-1 gap-8">
-            {filteredEvents.map((event) => (
-              <motion.div
-                key={event.id}
-                variants={fadeInUp}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
-              >
-                {/* Event Header with Gradient - Updated with indigo/purple gradient */}
-                <div className="bg-gradient-to-r from-blue-700 to-purple-700 text-white p-6">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                    <div>
-                      <h2 className="text-3xl font-bold">{event.title}</h2>
-                      <p className="text-indigo-100 mt-2">Presented by: {event.presentedBy}</p>
-                      <p className="text-indigo-100">In Collaboration with: {event.collaboration}</p>
-                    </div>
-                    <div className="mt-4 md:mt-0">
-                      <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-white text-indigo-600">
-                        <FaCheckCircle className="mr-2" /> Registration Open
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-8">
-                  {/* Overview Section with Error Handling - Updated with indigo color scheme */}
-                  <div className="mb-8 bg-indigo-50 p-6 rounded-xl border-l-4 border-indigo-500">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-3 flex items-center">
-                      <FaInfoCircle className="mr-2 text-indigo-600" /> Overview
-                    </h3>
-                    <p className="text-gray-700 leading-relaxed">
-                      {event.overview || "No overview available for this event."}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    {/* Timeline Section - Updated with indigo color scheme */}
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                      <div className="bg-indigo-600 text-white py-3 px-4">
-                        <h3 className="text-lg font-semibold flex items-center">
-                          <FaCalendarAlt className="mr-2" /> Timeline
-                        </h3>
-                      </div>
-                      <div className="p-4">
-                        {event.timeline && event.timeline.length > 0 ? (
-                          <table className="min-w-full">
-                            <thead>
-                              <tr>
-                                <th className="text-left text-sm font-medium text-gray-500 pb-3">Activity</th>
-                                <th className="text-left text-sm font-medium text-gray-500 pb-3">Date</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {event.timeline.map((item, index) => (
-                                <tr key={index} className={index > 0 ? "border-t border-gray-100" : ""}>
-                                  <td className="py-3 text-sm text-gray-700 font-medium">{item.activity}</td>
-                                  <td className="py-3 text-sm text-gray-700">{item.date}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <p className="text-gray-500 py-4 text-center">Timeline details not available</p>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Prizes Section - Updated with indigo color scheme */}
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-                      <div className="bg-indigo-600 text-white py-3 px-4">
-                        <h3 className="text-lg font-semibold flex items-center">
-                          <FaTrophy className="mr-2" /> Prizes
-                        </h3>
-                      </div>
-                      <div className="p-4">
-                        {event.prizes && event.prizes.length > 0 ? (
-                          <table className="min-w-full">
-                            <thead>
-                              <tr>
-                                <th className="text-left text-sm font-medium text-gray-500 pb-3">Position</th>
-                                <th className="text-left text-sm font-medium text-gray-500 pb-3">Prize</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {event.prizes.map((prize, index) => (
-                                <tr key={index} className={index > 0 ? "border-t border-gray-100" : ""}>
-                                  <td className="py-3 text-sm text-gray-700 font-medium">{prize.position}</td>
-                                  <td className="py-3 text-sm text-gray-700">{prize.amount}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        ) : (
-                          <p className="text-gray-500 py-4 text-center">Prize details not available</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Domains Section - Updated with indigo color scheme */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                      <FaUsers className="mr-2 text-indigo-600" /> Domains
-                    </h3>
-                    {event.domains && event.domains.length > 0 ? (
-                      <div className="flex flex-wrap gap-3">
-                        {event.domains.map((domain, index) => (
-                          <span
-                            key={index}
-                            className="px-4 py-2 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium hover:bg-indigo-200 transition-colors duration-200 cursor-pointer"
-                          >
-                            {domain}
-                          </span>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500">No specific domains mentioned for this event.</p>
-                    )}
-                  </div>
-
-                  {/* Event Phases Section - Updated with indigo color scheme */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                      <FaLaptop className="mr-2 text-indigo-600" /> Event Phases
-                    </h3>
-                    {event.phases && event.phases.length > 0 ? (
-                      <div className="space-y-4">
-                        {event.phases.map((phase, index) => (
-                          <div key={index} className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                            <h4 className="font-semibold text-gray-800 text-lg mb-2">{phase.name}</h4>
-                            <p className="text-gray-600">{phase.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 p-4 bg-gray-50 rounded-xl">Event phase details not available.</p>
-                    )}
-                  </div>
-
-                  {/* Judging Criteria Section */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4">Judging Criteria</h3>
-                    {event.criteria && event.criteria.length > 0 ? (
-                      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                        {event.criteria.map((criterion, index) => (
-                          <div
-                            key={index}
-                            className="bg-white rounded-xl p-4 text-center border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
-                          >
-                            <p className="text-gray-800 font-medium mb-2">{criterion.name}</p>
-                            <p className="text-indigo-600 font-bold text-xl">{criterion.weight}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 p-4 bg-gray-50 rounded-xl">Judging criteria not specified.</p>
-                    )}
-                  </div>
-
-                  {/* Contact Information Section */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-4 flex items-center">
-                      <FaMapMarkerAlt className="mr-2 text-indigo-600" /> Contact Information
-                    </h3>
-                    {event.contacts && event.contacts.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {event.contacts.map((contact, index) => (
-                          <div
-                            key={index}
-                            className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
-                          >
-                            <h4 className="font-semibold text-gray-800 text-lg">{contact.name}</h4>
-                            <p className="text-gray-600">{contact.role}</p>
-                            <div className="mt-3 space-y-1">
-                              <p className="text-gray-700">
-                                <span className="font-medium">Email:</span> {contact.email}
-                              </p>
-                              <p className="text-gray-700">
-                                <span className="font-medium">Phone:</span> {contact.phone}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 p-4 bg-gray-50 rounded-xl">Contact information not available.</p>
-                    )}
-                  </div>
-
-                  {/* Registration Button - Updated with indigo color scheme */}
-                  <div className="flex justify-center mt-10">
-                    {event.registrationLink ? (
-                      <a
-                        href={event.registrationLink}
-                        className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200"
-                      >
-                        Register Now <FaArrowRight className="ml-2" />
-                      </a>
-                    ) : (
-                      <button
-                        disabled
-                        className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-md text-white bg-gray-400 cursor-not-allowed"
-                      >
-                        Registration Unavailable
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-      </div>
-
-      {/* Footer - Enhanced with gradient */}
-      <footer className="bg-gradient-to-r from-blue-900 to-purple-900 text-white py-12">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <h1 className="text-2xl font-bold">
-                Mentor <span className="text-indigo-300">Labs</span>
-              </h1>
-              <p className="text-indigo-200 mt-2">Pioneering the future through AI and Data Science</p>
-            </div>
-            <div className="flex flex-wrap justify-center gap-6">
-              {["Home", "About", "People", "Research", "Programs", "Contact"].map((item) => (
-                <Link
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="text-indigo-200 hover:text-white transition-colors"
-                >
-                  {item}
-                </Link>
-              ))}
-            </div>
-          </div>
-          <hr className="border-indigo-800 my-8" />
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-indigo-300">© 2025 MENTOR LABS. All rights reserved.</p>
-            <p className="text-indigo-300 mt-4 md:mt-0">
-              <Link href="#" className="hover:text-white transition-colors">
-                Privacy Policy
-              </Link>{" "}
-              |
-              <Link href="#" className="hover:text-white transition-colors ml-2">
-                Terms of Service
-              </Link>
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* Global error boundary */}
-      <ErrorBoundary />
+      </AnimatePresence>
     </div>
-  )
-}
-
-// Simple error boundary component
-function ErrorBoundary() {
-  if (typeof window !== "undefined") {
-    window.addEventListener("error", (event) => {
-      console.error("Caught in error boundary:", event.error)
-    })
+  </div>
+</section>
+  
+          {/* Contact Section */}
+         
+<section id="contact" className="py-28 bg-gray-900 text-white">
+  <div className="container mx-auto px-8">
+    <div className="text-center mb-20">
+      <h2 className="text-sm text-blue-400 font-semibold uppercase tracking-wide mb-3">Get In Touch</h2>
+      <h3 className="text-3xl md:text-4xl font-bold mb-5">Contact Us</h3>
+      <div className="w-24 h-1 bg-blue-500 mx-auto mb-8"></div>
+    </div>
+    <div className="flex flex-col md:flex-row gap-12 max-w-6xl mx-auto">
+      <div className="md:w-1/2">
+        <div className="bg-white/5 backdrop-blur-sm p-10 rounded-xl border border-white/10">
+          <h4 className="text-2xl font-bold mb-8">Send Us a Message</h4>
+          <form className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium mb-2">Your Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  className="w-full px-4 py-3 bg-white/10 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium mb-2">Your Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  className="w-full px-4 py-3 bg-white/10 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  placeholder="john@example.com"
+                />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="subject" className="block text-sm font-medium mb-2">Subject</label>
+              <input
+                type="text"
+                id="subject"
+                className="w-full px-4 py-3 bg-white/10 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                placeholder="Your message subject"
+              />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-sm font-medium mb-2">Message</label>
+              <textarea
+                id="message"
+                rows={5}
+                className="w-full px-4 py-3 bg-white/10 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                placeholder="Your message here..."
+              ></textarea>
+            </div>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-4 rounded-md font-medium transition-all shadow-md hover:shadow-lg w-full">
+              Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+      <div className="md:w-1/2">
+        <div className="bg-white/5 backdrop-blur-sm p-10 rounded-xl border border-white/10 mb-10 h-auto md:h-3/5">
+          <h4 className="text-2xl font-bold mb-8">India Campus</h4>
+          <div className="space-y-6">
+            <div className="flex items-start">
+              <FaMapMarkerAlt className="text-blue-400 text-2xl mt-1 mr-5" />
+              <p className="text-lg">Thapar Institute of Engineering & Technology, Patiala, Punjab, India - 147004</p>
+            </div>
+            <div className="flex items-start">
+              <FaEnvelope className="text-blue-400 text-2xl mt-1 mr-5" />
+              <p className="text-lg">mentorlabs@thapar.edu</p>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  <div className="mt-8 flex justify-center space-x-6">
+                    <a href="#" className="text-white hover:text-blue-400 transition-colors">
+                      <FaTwitter size={24} />
+                    </a>
+                    <a href="#" className="text-white hover:text-blue-400 transition-colors">
+                      <FaLinkedin size={24} />
+                    </a>
+                    <a href="#" className="text-white hover:text-blue-400 transition-colors">
+                      <FaGithub size={24} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+  
+          {/* Footer */}
+          <footer className="bg-gray-950 text-white py-12">
+            <div className="container mx-auto px-6">
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <div className="mb-6 md:mb-0">
+                  <h1 className="text-2xl font-bold">
+                    Mentor <span className="text-blue-500">Labs</span>
+                  </h1>
+                  <p className="text-gray-400 mt-2">Pioneering the future through AI and Data Science</p>
+                </div>
+                <div className="flex flex-wrap justify-center gap-6">
+                  {['Home', 'About', 'People', 'Research', 'Programs', 'Contact'].map((item) => (
+                    <Link
+                      key={item}
+                      href={`#${item.toLowerCase()}`}
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
+                      {item}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+              <hr className="border-gray-800 my-8" />
+              <div className="flex flex-col md:flex-row justify-between items-center">
+                <p className="text-gray-500">© 2025 MENTOR LABS. All rights reserved.</p>
+                <p className="text-gray-500 mt-4 md:mt-0">
+                  <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link> | 
+                  <Link href="#" className="hover:text-white transition-colors ml-2">Terms of Service</Link>
+                </p>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </>
+    );
   }
-
-  return null
-}
-

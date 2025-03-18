@@ -154,13 +154,11 @@ export default function EventsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Navigation Bar - Enhanced with gradient */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrollY > 50
-            ? "bg-white/95 backdrop-blur-sm shadow-md"
-            : "bg-gradient-to-r from-indigo-900 via-purple-800 to-indigo-900"
+          scrollY > 50 ? "bg-white/95 backdrop-blur-sm shadow-md" : "bg-gradient-to-r from-blue-900 to-purple-900"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -257,7 +255,7 @@ export default function EventsPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-24">
-        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="mb-10 mt-10 text-center">
+        <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="mb-10 text-center mt-10"> 
           <h1 className="text-4xl font-bold text-gray-900 mb-3">Events & Competitions</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Discover and participate in our upcoming entrepreneurial events
@@ -305,7 +303,7 @@ export default function EventsPage() {
                 className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
               >
                 {/* Event Header with Gradient - Updated with indigo/purple gradient */}
-                <div className="bg-gradient-to-r from-indigo-700 via-purple-600 to-indigo-600 text-white p-6">
+                <div className="bg-gradient-to-r from-blue-700 to-purple-700 text-white p-6">
                   <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div>
                       <h2 className="text-3xl font-bold">{event.title}</h2>
@@ -511,7 +509,7 @@ export default function EventsPage() {
       </div>
 
       {/* Footer - Enhanced with gradient */}
-      <footer className="bg-gradient-to-r from-indigo-900 via-purple-900 to-indigo-900 text-white py-12">
+      <footer className="bg-gradient-to-r from-blue-900 to-purple-900 text-white py-12">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
