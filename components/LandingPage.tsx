@@ -587,6 +587,7 @@ export default function LandingPage() {
                 </motion.div>
               ))}
             </motion.div>
+            <Link href={'/our-team'}>
             <div className="text-center mt-12 sm:mt-16">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -596,6 +597,8 @@ export default function LandingPage() {
                 Meet Our Full Team <FaArrowRight className="ml-2 inline" />
               </motion.button>
             </div>
+            </Link>
+            
           </div>
         </section>
 

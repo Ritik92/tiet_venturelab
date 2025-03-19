@@ -23,7 +23,9 @@ import {
   LineChart,
   PlusCircle,
   ArrowRight,
-  ExternalLink
+  ExternalLink,
+  Search,
+  Filter
 } from 'lucide-react';
 import { getDashboardProducts, DashboardProduct } from '@/actions/products_user';
 import Link from 'next/link';
@@ -42,7 +44,7 @@ export default async function DashboardPage() {
   }
   
   const stats: DashboardStats = await getStats();
-  const recentProducts: DashboardProduct[] = await getDashboardProducts({ limit: 5 });
+  const allProducts: DashboardProduct[] = await getDashboardProducts();
 
   return (
     <div className="container mx-auto p-6 max-w-7xl space-y-8">
@@ -106,7 +108,7 @@ export default async function DashboardPage() {
       </section>
 
       <section>
-        <RecentProductsCard recentProducts={recentProducts} />
+        <AllProductsCard products={allProducts} />
       </section>
     </div>
   );
@@ -282,22 +284,23 @@ function FundingProgressCard({ stats }: FundingProgressCardProps) {
   );
 }
 
-interface RecentProductsCardProps {
-  recentProducts: DashboardProduct[];
+interface AllProductsCardProps {
+  products: DashboardProduct[];
 }
 
-function RecentProductsCard({ recentProducts }: RecentProductsCardProps) {
+function AllProductsCard({ products }: AllProductsCardProps) {
   return (
     <Card className="border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-lg font-semibold text-gray-900">Recent Products</CardTitle>
-            <CardDescription>Your recently added products</CardDescription>
+            <CardTitle className="text-lg font-semibold text-gray-900">My Products</CardTitle>
+            <CardDescription>All your products</CardDescription>
           </div>
-          <Link href="/dashboard/user/myproducts">
-            <Button variant="outline" size="sm" className="h-9 hover:bg-gray-50 hover:text-sky-600 hover:border-sky-200 transition-colors">
-              View all <ArrowRight className="ml-1 h-3.5 w-3.5" />
+          <Link href="/dashboard/user/submit-product">
+            <Button className="flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white shadow-sm">
+              <PlusCircle className="h-4 w-4" />
+              <span>New Product</span>
             </Button>
           </Link>
         </div>
@@ -311,11 +314,11 @@ function RecentProductsCard({ recentProducts }: RecentProductsCardProps) {
             <div className="col-span-2">Created</div>
           </div>
           <div className="divide-y divide-gray-100">
-            {recentProducts.length > 0 ? (
-              recentProducts.map((product) => (
+            {products.length > 0 ? (
+              products.map((product) => (
                 <div key={product.id} className="grid grid-cols-12 p-4 text-sm items-center hover:bg-gray-50 transition-colors">
                   <div className="col-span-5 font-medium truncate">
-                    <Link href={`/products/${product.id}`} className="hover:text-sky-600 text-gray-900 transition-colors flex items-center gap-1.5 group">
+                    <Link href={`/dashboard/user/myproducts/${product.id}`} className="hover:text-sky-600 text-gray-900 transition-colors flex items-center gap-1.5 group">
                       {product.title}
                       <ExternalLink className="h-3.5 w-3.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
@@ -357,16 +360,6 @@ function RecentProductsCard({ recentProducts }: RecentProductsCardProps) {
           </div>
         </div>
       </CardContent>
-      {recentProducts.length > 0 && (
-        <CardFooter className="border-t pt-5 flex justify-end">
-          <Link href="/dashboard/user/submit-product">
-            <Button className="bg-sky-600 hover:bg-sky-700 shadow-sm">
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add New Product
-            </Button>
-          </Link>
-        </CardFooter>
-      )}
     </Card>
   );
 }

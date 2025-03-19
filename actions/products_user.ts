@@ -33,7 +33,7 @@ export async function getDashboardProducts(options: GetProductsOptions = {}): Pr
     throw new Error('Unauthorized');
   }
   
-  const { limit = 10, status, category, search } = options;
+  const { limit, status, category, search, page = 1 } = options;
   const userId = session.user.id;
   
   // Define base query filters - always filter by current user
@@ -57,11 +57,16 @@ export async function getDashboardProducts(options: GetProductsOptions = {}): Pr
     ];
   }
   
+  // Calculate pagination
+  const skip = limit ? (page - 1) * limit : undefined;
+  const take = limit;
+  
   // Only select the fields we need
   const products = await prisma.product.findMany({
     where,
     orderBy: { updatedAt: 'desc' },
-    take: limit,
+    skip,
+    take,
     select: {
       id: true,
       title: true,
@@ -134,9 +139,8 @@ export async function updateProductStatus(productId: string, status: ProductStat
     data: { status }
   });
   
-  revalidatePath(`/products/${productId}`);
-  revalidatePath('/products');
-  revalidatePath('/dashboard');
+  revalidatePath(`/dashboard/user/myproducts/${productId}`);
+  revalidatePath('/dashboard/user');
   
   return { success: true };
 }
