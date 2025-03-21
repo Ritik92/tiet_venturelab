@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
     // Get approved products that don't have mentorships
     const availableProducts = await prisma.product.findMany({
       where: {
-        status: "APPROVED",
+      
         mentorship: null, // No existing mentorship
       },
       include: {

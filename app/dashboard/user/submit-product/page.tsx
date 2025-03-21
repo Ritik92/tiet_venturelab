@@ -149,7 +149,7 @@ export default function SubmitProduct() {
       }
 
       const data = await response.json();
-      router.push(`/dashboard/user/myproducts`);
+      router.push(`/dashboard/user`);
     } catch (error) {
       console.error('Error submitting product:', error);
       alert('Failed to submit product. Please try again.');
