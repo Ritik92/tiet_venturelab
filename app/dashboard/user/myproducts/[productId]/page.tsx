@@ -129,13 +129,13 @@ export default function ProductDetailPage() {
           <h2 className="text-2xl font-bold text-gray-800 mb-3">Product Not Found</h2>
           <p className="text-gray-600 mb-6">{error || 'We couldn\'t find the product you\'re looking for. It might have been removed or you may have followed an invalid link.'}</p>
           <Link 
-            href="/dashboard/user/myproducts" 
+            href="/dashboard/user" 
             className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300 shadow-md hover:shadow-lg"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
             </svg>
-            Back to My Products
+            Back to Dashboard
           </Link>
         </div>
       </div>
@@ -156,13 +156,13 @@ export default function ProductDetailPage() {
         {/* Page header with breadcrumb navigation */}
         <div className="container mx-auto px-4 mb-8">
           <Link 
-            href="/dashboard/user/myproducts" 
+            href="/dashboard/user" 
             className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
             </svg>
-            Back to My Products
+            Back to Dashboard
           </Link>
         </div>
 

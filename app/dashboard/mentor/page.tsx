@@ -43,12 +43,12 @@ export default async function MentorDashboardPage() {
             Manage your mentorships and track entrepreneur progress
           </p>
         </div>
-        <Link href="/dashboard/mentor/profile">
+        {/* <Link href="/dashboard/mentor/profile">
           <Button variant="outline" className="flex items-center gap-2 border-gray-200 text-gray-700 hover:bg-gray-50">
             <UserCheck className="h-4 w-4" />
             <span>Mentor Profile</span>
           </Button>
-        </Link>
+        </Link> */}
       </header>
 
       <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -293,12 +293,12 @@ function AllMentorshipsCard({ mentorships }: AllMentorshipsCardProps) {
             <CardTitle className="text-lg font-semibold text-gray-900">My Mentorships</CardTitle>
             <CardDescription>All your active mentorships</CardDescription>
           </div>
-          <Link href="/dashboard/mentor/available-products">
+          {/* <Link href="/dashboard/mentor/available-products">
             <Button className="flex items-center gap-2 bg-sky-600 hover:bg-sky-700 text-white shadow-sm">
               <BookOpen className="h-4 w-4" />
               <span>Available Products</span>
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </CardHeader>
       <CardContent>
